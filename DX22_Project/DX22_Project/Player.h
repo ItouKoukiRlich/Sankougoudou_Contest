@@ -43,6 +43,11 @@ private:
 	void Control();
 
 	/// <summary>
+	/// プレイヤーの移動ベクトルの計算
+	/// </summary>
+	void Move();
+
+	/// <summary>
 	/// 本体の描画
 	/// </summary>
 	void DrawBody();
@@ -53,6 +58,8 @@ private:
 	Model*		m_pModelArm;			//プレイヤーモデル(腕)
 	Model*		m_pModelLeg;			//プレイヤーモデル(足)
 	float		m_Move[DirectionMax];	//各方向の移動量
+	float		m_fRotationAngleY;		//Y軸中心の回転度
+	bool		m_bAction;				//操作が行われたか
 };
 
 #endif

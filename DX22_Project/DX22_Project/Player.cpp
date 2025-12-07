@@ -9,6 +9,8 @@ Player::Player()
 	,m_pModelBody(nullptr)
 	,m_pModelArm(nullptr)
 	,m_pModelLeg(nullptr)
+	,m_fRotationAngleY(0.0f)
+	,m_bAction(false)
 {
 	//---- それぞれの方向の移動量をリセット ----
 	for (int i = 0; i < Player::DirectionMax; i++)
@@ -29,6 +31,7 @@ Player::~Player()
 void Player::Update()
 {
 	Control();	//操作
+	Move();		//移動計算
 }
 
 void Player::Draw()
@@ -40,18 +43,17 @@ void Player::Draw()
 
 void Player::Control()
 {
-	DirectX::XMFLOAT3 move;
-
 	//---- 上下移動 ----
 	if (IsKeyPress('Q'))
 	{
+		m_bAction = true;
 		m_Move[Player::MoveDirection::Up] += cm_IncreaseMove;	//移動量を増やす
 		if (m_Move[Player::MoveDirection::Up] > cm_MaxMove)		//一定の移動量を越えない用意に補正
 			m_Move[Player::MoveDirection::Up] = cm_MaxMove;
 	}
 	else if (IsKeyPress('E'))
 	{
-
+		m_bAction = true;
 		m_Move[Player::MoveDirection::Up] -= cm_IncreaseMove;
 		if (m_Move[Player::MoveDirection::Up] < -cm_MaxMove)
 			m_Move[Player::MoveDirection::Up] = -cm_MaxMove;
@@ -60,14 +62,14 @@ void Player::Control()
 	//---- 前後移動 ----
 	if (IsKeyPress('W'))
 	{
-
+		m_bAction = true;
 		m_Move[Player::MoveDirection::Forward] += cm_IncreaseMove;
 		if (m_Move[Player::MoveDirection::Forward] > cm_MaxMove)
 			m_Move[Player::MoveDirection::Forward] = cm_MaxMove;
 	}
 	else if (IsKeyPress('S'))
 	{
-
+		m_bAction = true;
 		m_Move[Player::MoveDirection::Forward] -= cm_IncreaseMove;
 		if (m_Move[Player::MoveDirection::Forward] < -cm_MaxMove)
 			m_Move[Player::MoveDirection::Forward] = -cm_MaxMove;
@@ -76,12 +78,14 @@ void Player::Control()
 	//---- 左右移動 ----
 	if (IsKeyPress('D'))
 	{
+		m_bAction = true;
 		m_Move[Player::MoveDirection::Left] -= cm_IncreaseMove;
 		if (m_Move[Player::MoveDirection::Left] < -cm_MaxMove)
 			m_Move[Player::MoveDirection::Left] = -cm_MaxMove;
 	}
 	else if (IsKeyPress('A'))
 	{
+		m_bAction = true;
 		m_Move[Player::MoveDirection::Left] += cm_IncreaseMove;
 		if (m_Move[Player::MoveDirection::Left] > cm_MaxMove)
 			m_Move[Player::MoveDirection::Left] = cm_MaxMove;
@@ -94,39 +98,64 @@ void Player::Control()
 	if (IsKeyRelease('S')) m_Move[Player::MoveDirection::Forward]	= 0.0f;
 	if (IsKeyRelease('D')) m_Move[Player::MoveDirection::Left]		= 0.0f;
 	if (IsKeyRelease('A')) m_Move[Player::MoveDirection::Left]		= 0.0f;
-	
+}
+
+void Player::Move()
+{
 	//---- 各方向のベクトルを求める ----
-	
+
 	//上ベクトル
 	DirectX::XMFLOAT3	up		= { 0.0f, 1.0f, 0.0f };
 	DirectX::XMVECTOR	vecUp	= DirectX::XMLoadFloat3(&up);			//上ベクトル
 						vecUp	= DirectX::XMVector3Normalize(vecUp);	//正規化
-	
+
 	//直進ベクトル（カメラの注視点に向けて移動）
 	DirectX::XMFLOAT3 look			= m_pCamera->GetLook();								//注視点を入手
 	DirectX::XMVECTOR LookVec		= DirectX::XMLoadFloat3(&look);						//注視点のベクトル
 	DirectX::XMVECTOR PlayerVec		= DirectX::XMLoadFloat3(&m_Pos);					//プレイヤーベクトル
 	DirectX::XMVECTOR vecForward	= DirectX::XMVectorSubtract(LookVec, PlayerVec);	//前方ベクトル
 	vecForward = DirectX::XMVector3Normalize(vecForward);								//正規化
-	
+
 	//左ベクトル
 	DirectX::XMVECTOR vecLeft = DirectX::XMVector3Cross(vecForward, vecUp);		//左ベクトル
 	vecLeft = DirectX::XMVector3Normalize(vecLeft);								//正規化
 
 	//---- 各方向の移動量をベクトルと掛け合わせる ----
-	vecUp		= DirectX::XMVectorScale(vecUp,			m_Move[Player::MoveDirection::Up]		);
-	vecForward	= DirectX::XMVectorScale(vecForward,	m_Move[Player::MoveDirection::Forward]	);
-	vecLeft		= DirectX::XMVectorScale(vecLeft,		m_Move[Player::MoveDirection::Left]		);
+	vecUp		= DirectX::XMVectorScale(vecUp, m_Move[Player::MoveDirection::Up]);
+	vecForward	= DirectX::XMVectorScale(vecForward, m_Move[Player::MoveDirection::Forward]);
+	vecLeft		= DirectX::XMVectorScale(vecLeft, m_Move[Player::MoveDirection::Left]);
 
 	//---- 各方向のベクトルを合算 ----
-	DirectX::XMVECTOR	vec = DirectX::XMVectorAdd(vecUp, vecForward);
-						vec = DirectX::XMVectorAdd(vec, vecLeft);
+	DirectX::XMFLOAT3 move;
+	DirectX::XMVECTOR vecXZ = DirectX::XMVectorAdd(vecForward, vecLeft);
+	DirectX::XMVECTOR vec	= DirectX::XMVectorAdd(vecUp, vecXZ);
 	DirectX::XMStoreFloat3(&move, vec);
-	
+
 	//---- 最終的な移動量を位置に合わせる ----
 	m_Pos.x += move.x;
 	m_Pos.y += move.y;
 	m_Pos.z += move.z;
+
+	//---- プレイヤーの回転 ----
+	//移動していたら移動方向にプレイヤーが向くように回転する
+	if (m_bAction)
+	{
+		DirectX::XMFLOAT3 fZ	= { 0.0f, 0.0f, 1.0f };
+		DirectX::XMVECTOR vecZ	= DirectX::XMLoadFloat3(&fZ);			//デフォルトの方向ベクトル
+		vecZ					= DirectX::XMVector3Normalize(vecZ);	//正規化
+
+		float x1 = DirectX::XMVectorGetX(vecZ);
+		float y1 = DirectX::XMVectorGetZ(vecZ);
+		float x2 = DirectX::XMVectorGetX(vecXZ);
+		float y2 = DirectX::XMVectorGetZ(vecXZ);
+
+		float dot = x1 * x2 + y1 * y2;
+		float det = x1 * y2 - y1 * x2;
+
+		m_fRotationAngleY = atan2f(det, dot);
+		m_fRotationAngleY *= -1.0f;
+	}
+	m_bAction = false;
 }
 
 void Player::DrawBody()
@@ -140,7 +169,7 @@ void Player::DrawBody()
 	DirectX::XMMATRIX world;
 	DirectX::XMMATRIX Translation	= DirectX::XMMatrixTranslation(m_Pos.x, m_Pos.y, m_Pos.z);
 	DirectX::XMMATRIX Scale			= DirectX::XMMatrixScaling(1.0f, 1.0f, 1.0f);
-	DirectX::XMMATRIX Ry			= DirectX::XMMatrixRotationY(DirectX::XMConvertToRadians(0.0f));
+	DirectX::XMMATRIX Ry			= DirectX::XMMatrixRotationY(m_fRotationAngleY);
 	world = Scale * Ry * Translation;
 	DirectX::XMStoreFloat4x4(&fWVP[0], DirectX::XMMatrixTranspose(world));
 
