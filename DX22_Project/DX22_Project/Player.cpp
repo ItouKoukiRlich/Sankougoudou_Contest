@@ -19,6 +19,10 @@ Player::Player()
 	m_pModelBody = new Model;
 	if (!m_pModelBody->Load("Assets/Model/PlayerBody.fbx", 1.0f))
 		MessageBox(NULL, "PlayerModel_Body", "Error", MB_OK);
+
+	m_pModelArm = new Model;
+	if (!m_pModelArm->Load("Assets/Model/PlayerArm.fbx", 0.5f))
+		MessageBox(NULL, "PlayerModel_Arm", "Error", MB_OK);
 }
 
 Player::~Player()
@@ -36,8 +40,8 @@ void Player::Update()
 
 void Player::Draw()
 {
-	DrawBody();//本体
-	//腕
+	DrawBody();	//本体
+	DrawArm();	//腕
 	//足
 }
 
@@ -168,7 +172,7 @@ void Player::DrawBody()
 	//ワールド行列の作成
 	DirectX::XMMATRIX world;
 	DirectX::XMMATRIX Translation	= DirectX::XMMatrixTranslation(m_Pos.x, m_Pos.y, m_Pos.z);
-	DirectX::XMMATRIX Scale			= DirectX::XMMatrixScaling(1.0f, 1.0f, 1.0f);
+	DirectX::XMMATRIX Scale			= DirectX::XMMatrixScaling(1.0f, 1.0f, 0.5f);
 	DirectX::XMMATRIX Ry			= DirectX::XMMatrixRotationY(m_fRotationAngleY);
 	world = Scale * Ry * Translation;
 	DirectX::XMStoreFloat4x4(&fWVP[0], DirectX::XMMatrixTranspose(world));
@@ -194,6 +198,68 @@ void Player::DrawBody()
 
 		// モデルの描画 
 		m_pModelBody->Draw(i);
+	}
+}
+
+void Player::DrawArm()
+{
+	//頂点シェーダーに渡す変換行列の変数を宣言
+	DirectX::XMFLOAT4X4 fWVP[3] = {};
+	fWVP[1] = m_pCamera->GetViewMatrix();
+	fWVP[2] = m_pCamera->GetProjectionMatrix();
+
+	//---- 注視点の位置 ----
+	float cosA = cosf(m_fRotationAngleY);
+	float sinA = sinf(m_fRotationAngleY);
+
+	for (int i = 0; i < 2; i++)
+	{
+		//腕の位置を決定（2個目の描画時は位置が逆になる）
+		DirectX::XMFLOAT2 ArmPos = cm_ArmPos;
+		if (i == 1) ArmPos = DirectX::XMFLOAT2{ -cm_ArmPos.x, -cm_ArmPos.y };
+	
+		//==== ワールド行列の作成 ====
+		DirectX::XMMATRIX world;
+		
+		//移動行列
+		DirectX::XMMATRIX Translation = DirectX::XMMatrixTranslation
+		(	m_Pos.x + ArmPos.x * cosA + ArmPos.y * sinA,
+			m_Pos.y,
+			m_Pos.z + -(ArmPos.x) * sinA + ArmPos.y * cosA);
+		//拡大縮小行列(左右でモデルが反転する)
+		DirectX::XMMATRIX Scale;
+		switch (i)
+		{
+		case 0: Scale = DirectX::XMMatrixScaling( 1.0f, 1.0f, 1.0f); break;
+		case 1: Scale = DirectX::XMMatrixScaling(-1.0f, 1.0f, 1.0f); break;
+		}
+		//回転行列
+		DirectX::XMMATRIX Ry = DirectX::XMMatrixRotationY(m_fRotationAngleY);
+		world = Scale * Ry * Translation;
+		DirectX::XMStoreFloat4x4(&fWVP[0], DirectX::XMMatrixTranspose(world));
+
+		//シェーダーへの変換行列を設定
+		ShaderList::SetWVP(fWVP);
+
+		//モデルに使用する頂点シェーダー、ピクセルシェーダーを設定
+		m_pModelArm->SetVertexShader(ShaderList::GetVS(ShaderList::VS_WORLD));
+		m_pModelArm->SetPixelShader(ShaderList::GetPS(ShaderList::PS_UNLIT));
+
+		// マテリアル別にメッシュを表示 
+		for (unsigned int i = 0; i < m_pModelArm->GetMeshNum(); ++i)
+		{
+			// モデルのメッシュを取得 
+			const Model::Mesh mesh = *m_pModelArm->GetMesh(i);
+
+			// メッシュに割り当てられているマテリアルを取得 
+			Model::Material material = *m_pModelArm->GetMaterial(mesh.materialID);
+
+			// シェーダーへマテリアルを設定 
+			ShaderList::SetMaterial(material);
+
+			// モデルの描画 
+			m_pModelArm->Draw(i);
+		}
 	}
 }
 

@@ -31,9 +31,10 @@ private:
 	};
 
 private:
-	static constexpr float cm_Move			= 0.05f;
-	static constexpr float cm_IncreaseMove	= 0.01f;		//1フレームの増える移動量
-	static constexpr float cm_MaxMove		= 0.05f;			//最高速度
+	static constexpr float	cm_Move			= 0.05f;
+	static constexpr float	cm_IncreaseMove	= 0.01f;			//1フレームの増える移動量
+	static constexpr float	cm_MaxMove		= 0.05f;			//最高速度
+	const DirectX::XMFLOAT2 cm_ArmPos		= {0.75f, 0.0f};
 
 private:
 	
@@ -51,6 +52,11 @@ private:
 	/// 本体の描画
 	/// </summary>
 	void DrawBody();
+
+	/// <summary>
+	/// 手の描画
+	/// </summary>
+	void DrawArm();
 
 private:
 	CameraGame* m_pCamera;				//ゲーム内カメラ情報
