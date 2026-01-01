@@ -7,6 +7,7 @@
 #include "SceneGame.h"
 #include "Defines.h"
 #include "ShaderList.h"
+#include"Effect.h"
 
 //--- ƒOƒ[ƒoƒ‹•Ï”
 Scene*	g_pScene;
@@ -38,6 +39,7 @@ void Uninit()
 {
 	if (g_pScene) delete g_pScene;
 
+	EFK_INS->DeleteInstance();
 	ShaderList::Uninit();
 	UninitInput();
 	Sprite::Uninit();

@@ -2,12 +2,16 @@
 #define __DIRECTX_H__
 
 #include <d3d11.h>
+#include <DirectXMath.h>
 
 #pragma comment(lib, "d3d11.lib")
 
 #define SAFE_DELETE(p)			do{if(p){delete p; p = nullptr;}}while(0)
 #define SAFE_DELETE_ARRAY(p)	do{if(p){delete[] p; p = nullptr;}}while(0)
 #define SAFE_RELEASE(p)			do{if(p){p->Release(); p = nullptr;}}while(0)
+
+using DXf3 = DirectX::XMFLOAT3;	//DirectX::XMFLOAT3
+using DXf2 = DirectX::XMFLOAT2;	//DirectX::XMFLOAT2
 
 class RenderTarget;
 class DepthStencil;

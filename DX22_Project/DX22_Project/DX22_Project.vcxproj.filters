@@ -31,6 +31,9 @@
     <Filter Include="ヘッダー ファイル\Main">
       <UniqueIdentifier>{b42dfdaa-a1d4-4b37-a5e3-53b45d8da892}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Effect">
+      <UniqueIdentifier>{dea81127-439c-4da4-bf0b-9a06661ba37c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sprite.cpp">
@@ -59,9 +62,6 @@
     </ClCompile>
     <ClCompile Include="Texture.cpp">
       <Filter>ソース ファイル\System\DirectX</Filter>
-    </ClCompile>
-    <ClCompile Include="CameraDebug.cpp">
-      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="SceneGame.cpp">
       <Filter>ソース ファイル</Filter>
@@ -93,7 +93,13 @@
     <ClCompile Include="CameraGame.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="CameraDebug.cpp">
+      <Filter>ソース ファイル\System</Filter>
+    </ClCompile>
     <ClCompile Include="DebugBlock.cpp">
+      <Filter>ソース ファイル\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -128,9 +134,6 @@
     <ClInclude Include="Texture.h">
       <Filter>ヘッダー ファイル\System\DirectX</Filter>
     </ClInclude>
-    <ClInclude Include="CameraDebug.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="SceneGame.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -158,7 +161,25 @@
     <ClInclude Include="CameraGame.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="CameraDebug.h">
+      <Filter>ヘッダー ファイル\System</Filter>
+    </ClInclude>
     <ClInclude Include="DebugBlock.h">
+      <Filter>ヘッダー ファイル\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Effekseer.h">
+      <Filter>ヘッダー ファイル\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Effekseer.Modules.h">
+      <Filter>ヘッダー ファイル\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Effekseer.SIMD.h">
+      <Filter>ヘッダー ファイル\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="EffekseerRendererDX11.h">
+      <Filter>ヘッダー ファイル\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

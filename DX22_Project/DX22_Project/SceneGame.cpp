@@ -3,6 +3,7 @@
 #include"Defines.h"
 #include"ShaderList.h"
 #include"Geometory.h"
+#include"Effect.h"
 
 SceneGame::SceneGame()
 	:m_pCamera(new CameraGame)
@@ -14,18 +15,23 @@ SceneGame::SceneGame()
 	SetDepthTest(true);						//奥行を認知
 	m_pPlayer->SetCamera(m_pCamera);		//プレイヤーにカメラを設定
 	m_pCamera->SetPlayer(m_pPlayer);		//カメラ操作時に必要になるプレイヤーのアドレスを渡す
+	EFK_INS->SetCamera(m_pCamera);			//カメラをエフェクト管理クラスに設定
 }
 
 SceneGame::~SceneGame()
 {
 	SAFEDELETE(m_pPlayer);
 	SAFEDELETE(m_pCamera);
+	EFK_INS->DeleteInstance();
 }
 
 void SceneGame::Update()
 {
 	m_pPlayer->Update();		//プレイヤー
 	m_pCamera->Update();		//ゲーム内カメラ
+	
+	//---- エフェクトの更新処理(最後にやる) ----
+	Effect::GetInstance()->Update();
 }
 
 void SceneGame::Draw()
@@ -39,4 +45,6 @@ void SceneGame::Draw()
 #endif
 
 	m_pPlayer->Draw();
+
+	Effect::GetInstance()->Draw();
 }

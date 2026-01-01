@@ -3,14 +3,21 @@
 #include"Defines.h"
 #include"ShaderList.h"
 #include"Input.h"
+#include"DirectX.h"
+#include"Effect.h"
+
+#define FILEPPP u"Assets/Effect/Heal.efkefc"
+#define FILEDEM u"Assets/Effect/demo.efkefc"
 
 Player::Player()
 	:m_pCamera(nullptr)
 	,m_pModelBody(nullptr)
 	,m_pModelArm(nullptr)
 	,m_pModelLeg(nullptr)
-	,m_fRotationAngleY(0.0f)
-	,m_bAction(false)
+	,m_Angle(DirectX::XMFLOAT3{0.0f, 0.0f, 0.0f})
+	,m_ArmAngle(0.0f)
+	,efkHandle(-1)
+	,efkHandle2(-1)
 {
 	//---- それぞれの方向の移動量をリセット ----
 	for (int i = 0; i < Player::DirectionMax; i++)
@@ -23,6 +30,14 @@ Player::Player()
 	m_pModelArm = new Model;
 	if (!m_pModelArm->Load("Assets/Model/PlayerArm.fbx", 0.5f))
 		MessageBox(NULL, "PlayerModel_Arm", "Error", MB_OK);
+
+	m_pModelLeg = new Model;
+	if (!m_pModelLeg->Load("Assets/Model/PlayerLeg.fbx", 0.5f))
+		MessageBox(NULL, "PlayerModel_Leg", "Error", MB_OK);
+
+	Effect::GetInstance()->Load(FILEDEM);
+	Effect::GetInstance()->Load(FILEPPP);
+	Effect::GetInstance()->Play(FILEDEM, { 0.0f, 0.0f, 10.0f }, &efkHandle2, true);
 }
 
 Player::~Player()
@@ -36,13 +51,28 @@ void Player::Update()
 {
 	Control();	//操作
 	Move();		//移動計算
+
+	if (IsKeyTrigger('O'))
+	{
+		DirectX::XMFLOAT3 pos = { 0.0f, 0.0f, 10.0f };
+		Effect::GetInstance()->Play(FILEDEM, m_Pos, &efkHandle, true, &m_Pos);
+	}
+	if (IsKeyTrigger('P'))
+	{
+		Effect::GetInstance()->Stop(efkHandle);
+	}
+
+	if (IsKeyTrigger('L'))
+	{
+		Effect::GetInstance()->Stop(efkHandle2);
+	}
 }
 
 void Player::Draw()
 {
 	DrawBody();	//本体
 	DrawArm();	//腕
-	//足
+	DrawLeg();	//足
 }
 
 void Player::Control()
@@ -50,14 +80,14 @@ void Player::Control()
 	//---- 上下移動 ----
 	if (IsKeyPress('Q'))
 	{
-		m_bAction = true;
+		
 		m_Move[Player::MoveDirection::Up] += cm_IncreaseMove;	//移動量を増やす
 		if (m_Move[Player::MoveDirection::Up] > cm_MaxMove)		//一定の移動量を越えない用意に補正
 			m_Move[Player::MoveDirection::Up] = cm_MaxMove;
 	}
 	else if (IsKeyPress('E'))
 	{
-		m_bAction = true;
+		
 		m_Move[Player::MoveDirection::Up] -= cm_IncreaseMove;
 		if (m_Move[Player::MoveDirection::Up] < -cm_MaxMove)
 			m_Move[Player::MoveDirection::Up] = -cm_MaxMove;
@@ -66,14 +96,21 @@ void Player::Control()
 	//---- 前後移動 ----
 	if (IsKeyPress('W'))
 	{
-		m_bAction = true;
+		//腕が傾くように補正を掛ける
+		m_ArmAngle += cm_ChangeArmAngle;
+		if (m_ArmAngle > cm_MaxArmAngle) m_ArmAngle = cm_MaxArmAngle;
+
+		//移動量を掛ける
 		m_Move[Player::MoveDirection::Forward] += cm_IncreaseMove;
 		if (m_Move[Player::MoveDirection::Forward] > cm_MaxMove)
 			m_Move[Player::MoveDirection::Forward] = cm_MaxMove;
 	}
 	else if (IsKeyPress('S'))
 	{
-		m_bAction = true;
+		//腕が傾くように補正を掛ける
+		m_ArmAngle -= cm_ChangeArmAngle;
+		if (m_ArmAngle < -cm_MaxArmAngle) m_ArmAngle = -cm_MaxArmAngle;
+
 		m_Move[Player::MoveDirection::Forward] -= cm_IncreaseMove;
 		if (m_Move[Player::MoveDirection::Forward] < -cm_MaxMove)
 			m_Move[Player::MoveDirection::Forward] = -cm_MaxMove;
@@ -82,14 +119,20 @@ void Player::Control()
 	//---- 左右移動 ----
 	if (IsKeyPress('D'))
 	{
-		m_bAction = true;
+		//体が傾くように補正を掛ける
+		//m_Angle.z -= cm_ChangeAngle;
+		//if (m_Angle.z < -cm_MaxBodyAngleZ) m_Angle.z = -cm_MaxBodyAngleZ;
+
 		m_Move[Player::MoveDirection::Left] -= cm_IncreaseMove;
 		if (m_Move[Player::MoveDirection::Left] < -cm_MaxMove)
 			m_Move[Player::MoveDirection::Left] = -cm_MaxMove;
 	}
 	else if (IsKeyPress('A'))
 	{
-		m_bAction = true;
+		//体が傾くように補正を掛ける
+		//m_Angle.z += cm_ChangeAngle;
+		//if (m_Angle.z > cm_MaxBodyAngleZ) m_Angle.z = cm_MaxBodyAngleZ;
+
 		m_Move[Player::MoveDirection::Left] += cm_IncreaseMove;
 		if (m_Move[Player::MoveDirection::Left] > cm_MaxMove)
 			m_Move[Player::MoveDirection::Left] = cm_MaxMove;
@@ -102,6 +145,18 @@ void Player::Control()
 	if (IsKeyRelease('S')) m_Move[Player::MoveDirection::Forward]	= 0.0f;
 	if (IsKeyRelease('D')) m_Move[Player::MoveDirection::Left]		= 0.0f;
 	if (IsKeyRelease('A')) m_Move[Player::MoveDirection::Left]		= 0.0f;
+
+	//---- 手の角度が自動的に戻るようにする ----
+	//角度が０度より大きかったらマイナス。
+	//０より小さかったらプラス
+	//角度の変更料が同じだと変化しないため変更料に補正を掛ける
+	if (m_ArmAngle >= 0.0f) m_ArmAngle -= cm_ChangeArmAngle * 0.5f;
+	else m_ArmAngle += cm_ChangeArmAngle * 0.5f;
+
+	//---- Z軸回転をしている場合、自動的に戻るようにする ----
+	if (m_Angle.z > 0.0f)		m_Angle.z -= cm_ChangeAngle * 0.5f;
+	else if (m_Angle.z < 0.0f)	m_Angle.z += cm_ChangeAngle * 0.5f;
+	m_Angle.z = DirectX::XMConvertToRadians(m_Angle.z);	//最終的な角度をラジアンに変換
 }
 
 void Player::Move()
@@ -119,6 +174,7 @@ void Player::Move()
 	DirectX::XMVECTOR PlayerVec		= DirectX::XMLoadFloat3(&m_Pos);					//プレイヤーベクトル
 	DirectX::XMVECTOR vecForward	= DirectX::XMVectorSubtract(LookVec, PlayerVec);	//前方ベクトル
 	vecForward = DirectX::XMVector3Normalize(vecForward);								//正規化
+	DirectX::XMVECTOR vecLook = vecForward;	//プレイヤーの回転で使うためベクトルの保存
 
 	//左ベクトル
 	DirectX::XMVECTOR vecLeft = DirectX::XMVector3Cross(vecForward, vecUp);		//左ベクトル
@@ -140,26 +196,26 @@ void Player::Move()
 	m_Pos.y += move.y;
 	m_Pos.z += move.z;
 
+	//エフェクトの位置も補正
+	EFK_INS->SetPos(efkHandle, m_Pos);
+
 	//---- プレイヤーの回転 ----
-	//移動していたら移動方向にプレイヤーが向くように回転する
-	if (m_bAction)
-	{
-		DirectX::XMFLOAT3 fZ	= { 0.0f, 0.0f, 1.0f };
-		DirectX::XMVECTOR vecZ	= DirectX::XMLoadFloat3(&fZ);			//デフォルトの方向ベクトル
-		vecZ					= DirectX::XMVector3Normalize(vecZ);	//正規化
+	//常に正面を向くようにする
+	//角度０のベクトルを求める
+	DirectX::XMFLOAT3 fZ	= { 0.0f, 0.0f, 1.0f };
+	DirectX::XMVECTOR vecZ	= DirectX::XMLoadFloat3(&fZ);			//デフォルトの方向ベクトル
+	vecZ					= DirectX::XMVector3Normalize(vecZ);	//正規化
 
-		float x1 = DirectX::XMVectorGetX(vecZ);
-		float y1 = DirectX::XMVectorGetZ(vecZ);
-		float x2 = DirectX::XMVectorGetX(vecXZ);
-		float y2 = DirectX::XMVectorGetZ(vecXZ);
+	float x1 = DirectX::XMVectorGetX(vecZ);
+	float y1 = DirectX::XMVectorGetZ(vecZ);
+	float x2 = DirectX::XMVectorGetX(vecLook);
+	float y2 = DirectX::XMVectorGetZ(vecLook);
 
-		float dot = x1 * x2 + y1 * y2;
-		float det = x1 * y2 - y1 * x2;
+	float dot = x1 * x2 + y1 * y2;
+	float det = x1 * y2 - y1 * x2;
 
-		m_fRotationAngleY = atan2f(det, dot);
-		m_fRotationAngleY *= -1.0f;
-	}
-	m_bAction = false;
+	m_Angle.y = atan2f(det, dot);
+	m_Angle.y *= -1.0f;
 }
 
 void Player::DrawBody()
@@ -173,8 +229,9 @@ void Player::DrawBody()
 	DirectX::XMMATRIX world;
 	DirectX::XMMATRIX Translation	= DirectX::XMMatrixTranslation(m_Pos.x, m_Pos.y, m_Pos.z);
 	DirectX::XMMATRIX Scale			= DirectX::XMMatrixScaling(1.0f, 1.0f, 0.5f);
-	DirectX::XMMATRIX Ry			= DirectX::XMMatrixRotationY(m_fRotationAngleY);
-	world = Scale * Ry * Translation;
+	DirectX::XMMATRIX Ry			= DirectX::XMMatrixRotationY(m_Angle.y);
+	DirectX::XMMATRIX Rz			= DirectX::XMMatrixRotationZ(m_Angle.z);
+	world = Scale * Ry * Rz * Translation;
 	DirectX::XMStoreFloat4x4(&fWVP[0], DirectX::XMMatrixTranspose(world));
 
 	//シェーダーへの変換行列を設定
@@ -209,23 +266,23 @@ void Player::DrawArm()
 	fWVP[2] = m_pCamera->GetProjectionMatrix();
 
 	//---- 注視点の位置 ----
-	float cosA = cosf(m_fRotationAngleY);
-	float sinA = sinf(m_fRotationAngleY);
+	float cosY = cosf(-m_Angle.y);
+	float sinY = sinf(-m_Angle.y);
 
 	for (int i = 0; i < 2; i++)
 	{
 		//腕の位置を決定（2個目の描画時は位置が逆になる）
 		DirectX::XMFLOAT2 ArmPos = cm_ArmPos;
-		if (i == 1) ArmPos = DirectX::XMFLOAT2{ -cm_ArmPos.x, -cm_ArmPos.y };
-	
+		if (i == 1) ArmPos = DirectX::XMFLOAT2{ -cm_ArmPos.x, cm_ArmPos.y };
+
 		//==== ワールド行列の作成 ====
 		DirectX::XMMATRIX world;
 		
 		//移動行列
 		DirectX::XMMATRIX Translation = DirectX::XMMatrixTranslation
-		(	m_Pos.x + ArmPos.x * cosA + ArmPos.y * sinA,
-			m_Pos.y,
-			m_Pos.z + -(ArmPos.x) * sinA + ArmPos.y * cosA);
+		(	m_Pos.x + ArmPos.x * cosY,
+			m_Pos.y + ArmPos.y,
+			m_Pos.z + ArmPos.x * sinY);
 		//拡大縮小行列(左右でモデルが反転する)
 		DirectX::XMMATRIX Scale;
 		switch (i)
@@ -234,8 +291,10 @@ void Player::DrawArm()
 		case 1: Scale = DirectX::XMMatrixScaling(-1.0f, 1.0f, 1.0f); break;
 		}
 		//回転行列
-		DirectX::XMMATRIX Ry = DirectX::XMMatrixRotationY(m_fRotationAngleY);
-		world = Scale * Ry * Translation;
+		DirectX::XMMATRIX Rx = DirectX::XMMatrixRotationX(DirectX::XMConvertToRadians(m_ArmAngle));
+		DirectX::XMMATRIX Ry = DirectX::XMMatrixRotationY(m_Angle.y);
+		DirectX::XMMATRIX Rz = DirectX::XMMatrixRotationZ(m_Angle.z);
+		world = Scale * Rx * Ry * Rz * Translation;
 		DirectX::XMStoreFloat4x4(&fWVP[0], DirectX::XMMatrixTranspose(world));
 
 		//シェーダーへの変換行列を設定
@@ -259,6 +318,64 @@ void Player::DrawArm()
 
 			// モデルの描画 
 			m_pModelArm->Draw(i);
+		}
+	}
+}
+
+void Player::DrawLeg()
+{
+	//頂点シェーダーに渡す変換行列の変数を宣言
+	DirectX::XMFLOAT4X4 fWVP[3] = {};
+	fWVP[1] = m_pCamera->GetViewMatrix();
+	fWVP[2] = m_pCamera->GetProjectionMatrix();
+
+	//---- 注視点の位置 ----
+	float cosA = cosf(-m_Angle.y);
+	float sinA = sinf(-m_Angle.y);
+
+	for (int i = 0; i < 2; i++)
+	{
+		//腕の位置を決定（2個目の描画時は位置が逆になる）
+		DirectX::XMFLOAT2 LegPos = cm_LegPos;
+		if (i == 1) LegPos = DirectX::XMFLOAT2{ -cm_LegPos.x, cm_LegPos.y };
+
+		//==== ワールド行列の作成 ====
+		DirectX::XMMATRIX world;
+
+		//移動行列
+		DirectX::XMMATRIX Translation = DirectX::XMMatrixTranslation
+		(	m_Pos.x + LegPos.x * cosA,
+			m_Pos.y + LegPos.y,
+			m_Pos.z + LegPos.x * sinA);
+		//拡大縮小行列(左右でモデルが反転する)
+		DirectX::XMMATRIX Scale = DirectX::XMMatrixScaling(1.0f, 2.0f, 1.0f);
+		//回転行列
+		DirectX::XMMATRIX Ry = DirectX::XMMatrixRotationY(m_Angle.y);
+		DirectX::XMMATRIX Rz = DirectX::XMMatrixRotationZ(DirectX::XMConvertToRadians(m_Angle.z));
+		world = Scale * Ry * Rz * Translation;
+		DirectX::XMStoreFloat4x4(&fWVP[0], DirectX::XMMatrixTranspose(world));
+
+		//シェーダーへの変換行列を設定
+		ShaderList::SetWVP(fWVP);
+
+		//モデルに使用する頂点シェーダー、ピクセルシェーダーを設定
+		m_pModelLeg->SetVertexShader(ShaderList::GetVS(ShaderList::VS_WORLD));
+		m_pModelLeg->SetPixelShader(ShaderList::GetPS(ShaderList::PS_UNLIT));
+
+		// マテリアル別にメッシュを表示 
+		for (unsigned int i = 0; i < m_pModelLeg->GetMeshNum(); ++i)
+		{
+			// モデルのメッシュを取得 
+			const Model::Mesh mesh = *m_pModelLeg->GetMesh(i);
+
+			// メッシュに割り当てられているマテリアルを取得 
+			Model::Material material = *m_pModelLeg->GetMaterial(mesh.materialID);
+
+			// シェーダーへマテリアルを設定 
+			ShaderList::SetMaterial(material);
+
+			// モデルの描画 
+			m_pModelLeg->Draw(i);
 		}
 	}
 }

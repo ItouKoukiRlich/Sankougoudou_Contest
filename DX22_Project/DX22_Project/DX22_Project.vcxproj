@@ -148,6 +148,7 @@
     <ClCompile Include="CameraGame.cpp" />
     <ClCompile Include="DebugBlock.cpp" />
     <ClCompile Include="DirectX.cpp" />
+    <ClCompile Include="Effect.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Geometory.cpp" />
     <ClCompile Include="Input.cpp" />
@@ -172,6 +173,11 @@
     <ClInclude Include="DebugBlock.h" />
     <ClInclude Include="Defines.h" />
     <ClInclude Include="DirectX.h" />
+    <ClInclude Include="Effect.h" />
+    <ClInclude Include="Effekseer.h" />
+    <ClInclude Include="Effekseer.Modules.h" />
+    <ClInclude Include="Effekseer.SIMD.h" />
+    <ClInclude Include="EffekseerRendererDX11.h" />
     <ClInclude Include="Function.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Geometory.h" />
