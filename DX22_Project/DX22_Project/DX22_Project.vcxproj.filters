@@ -34,6 +34,18 @@
     <Filter Include="ヘッダー ファイル\Effect">
       <UniqueIdentifier>{dea81127-439c-4da4-bf0b-9a06661ba37c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\SceneGame">
+      <UniqueIdentifier>{11e36612-438f-4cea-9aff-f171174e852e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\SceneGame">
+      <UniqueIdentifier>{d878e155-6fcb-4ebe-8508-7ad856af411e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\SceneTitle">
+      <UniqueIdentifier>{3c86b6d0-73dc-4bd1-8c08-4f62c47523d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\SceneTitle">
+      <UniqueIdentifier>{d9d034e7-0f12-4d2f-a801-15c304ff6d48}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sprite.cpp">
@@ -63,9 +75,6 @@
     <ClCompile Include="Texture.cpp">
       <Filter>ソース ファイル\System\DirectX</Filter>
     </ClCompile>
-    <ClCompile Include="SceneGame.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="_model.cpp">
       <Filter>ソース ファイル\System</Filter>
     </ClCompile>
@@ -84,14 +93,8 @@
     <ClCompile Include="Camera.cpp">
       <Filter>ソース ファイル\Main</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="GameObject.cpp">
       <Filter>ソース ファイル\Main</Filter>
-    </ClCompile>
-    <ClCompile Include="CameraGame.cpp">
-      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="CameraDebug.cpp">
       <Filter>ソース ファイル\System</Filter>
@@ -100,6 +103,27 @@
       <Filter>ソース ファイル\System</Filter>
     </ClCompile>
     <ClCompile Include="Effect.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>ソース ファイル\SceneGame</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneGame.cpp">
+      <Filter>ソース ファイル\SceneGame</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraGame.cpp">
+      <Filter>ソース ファイル\SceneGame</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneTitle.cpp">
+      <Filter>ソース ファイル\SceneTitle</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraTitle.cpp">
+      <Filter>ソース ファイル\SceneTitle</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleUI.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -134,9 +158,6 @@
     <ClInclude Include="Texture.h">
       <Filter>ヘッダー ファイル\System\DirectX</Filter>
     </ClInclude>
-    <ClInclude Include="SceneGame.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>ヘッダー ファイル\Main</Filter>
     </ClInclude>
@@ -152,14 +173,8 @@
     <ClInclude Include="MathStruct.h">
       <Filter>ヘッダー ファイル\Main</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>ヘッダー ファイル\Main</Filter>
-    </ClInclude>
-    <ClInclude Include="CameraGame.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="CameraDebug.h">
       <Filter>ヘッダー ファイル\System</Filter>
@@ -180,6 +195,27 @@
       <Filter>ヘッダー ファイル\Effect</Filter>
     </ClInclude>
     <ClInclude Include="Effect.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>ヘッダー ファイル\SceneGame</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneGame.h">
+      <Filter>ヘッダー ファイル\SceneGame</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraGame.h">
+      <Filter>ヘッダー ファイル\SceneGame</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneTitle.h">
+      <Filter>ヘッダー ファイル\SceneTitle</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraTitle.h">
+      <Filter>ヘッダー ファイル\SceneTitle</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleUI.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

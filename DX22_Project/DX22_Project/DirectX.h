@@ -12,6 +12,7 @@
 
 using DXf3 = DirectX::XMFLOAT3;	//DirectX::XMFLOAT3
 using DXf2 = DirectX::XMFLOAT2;	//DirectX::XMFLOAT2
+using DXf4 = DirectX::XMFLOAT4;	//DirectX::XMFLOAT4
 
 class RenderTarget;
 class DepthStencil;

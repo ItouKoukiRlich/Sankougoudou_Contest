@@ -5,6 +5,7 @@
 #include "Sprite.h"
 #include "Input.h"
 #include "SceneGame.h"
+#include "SceneTitle.h"
 #include "Defines.h"
 #include "ShaderList.h"
 #include"Effect.h"
@@ -27,7 +28,7 @@ HRESULT Init(HWND hWnd, UINT width, UINT height)
 	ShaderList::Init();
 
 	// シーン
-	g_pScene = new SceneGame();
+	g_pScene = new SceneTitle();
 
 	//ウィンド情報の保存
 	g_hwnd = hWnd;

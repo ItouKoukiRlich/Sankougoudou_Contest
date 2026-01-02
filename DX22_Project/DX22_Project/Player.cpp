@@ -36,6 +36,7 @@ Player::Player()
 		MessageBox(NULL, "PlayerModel_Leg", "Error", MB_OK);
 
 	Effect::GetInstance()->Load(FILEDEM);
+	Effect::GetInstance()->Load(FILEDEM);
 	Effect::GetInstance()->Load(FILEPPP);
 	Effect::GetInstance()->Play(FILEDEM, { 0.0f, 0.0f, 10.0f }, &efkHandle2, true);
 }

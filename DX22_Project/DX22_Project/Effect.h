@@ -9,7 +9,8 @@
 #include"EffekseerRendererDX11.h"
 #include"Camera.h"
 
-using EFf3 = Effekseer::Vector3D;	//Effekseer::Vector3D
+using EFf3	= Effekseer::Vector3D;	//Effekseer::Vector3D
+using EFhdl = Effekseer::Handle;	//Effekseer::Handle
 
 //==== 定数・マクロ定義 ====
 #define EFK_INS Effect::GetInstance()	//インスタンス取得の省略
