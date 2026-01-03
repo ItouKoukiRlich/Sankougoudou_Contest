@@ -28,7 +28,7 @@ HRESULT Init(HWND hWnd, UINT width, UINT height)
 	ShaderList::Init();
 
 	// シーン
-	g_pScene = new SceneTitle();
+	g_pScene = new SceneGame();
 
 	//ウィンド情報の保存
 	g_hwnd = hWnd;

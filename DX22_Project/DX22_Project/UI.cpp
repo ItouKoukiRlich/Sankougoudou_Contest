@@ -45,6 +45,7 @@ void UI::Draw()
 		Sprite::SetWorld(world);
 		Sprite::SetSize((*it).size);
 		Sprite::SetUVPos((*it).uv);
+		Sprite::SetUVScale((*it).uvSize);
 		Sprite::SetColor((*it).color);
 		Sprite::SetTexture((*it).pTexture);
 		Sprite::Draw();
@@ -71,6 +72,7 @@ void UI::SetUI(const char* file, int Number, DXf2 pos, float LoadScale)
 	ui.size		= { w * LoadScale, h * LoadScale};
 	ui.scale	= { 1.0f, 1.0f };
 	ui.uv		= { 0.0f, 0.0f };
+	ui.uvSize	= { 1.0f, 1.0f };
 	ui.color	= { 1.0f, 1.0f, 1.0f, 1.0f };
 	ui.Angle	= 0.0f;
 	ui.bDraw	= true;
@@ -130,6 +132,19 @@ void UI::ChangeUVpos(int Number, float u, float v)
 	}
 }
 
+void UI::ChangeUVsize(int Number, float u, float v)
+{
+	for (std::vector<UI::UI_info>::iterator it = m_UI.begin(); it != m_UI.end(); ++it)
+	{
+		//指定された番号のデータを変更するため番号と一致するか確認
+		if ((*it).Number != Number) continue;
+
+		//変更/変更後は処理する必要がないためループを抜ける
+		(*it).uvSize = MakeDXf2(u, v);
+		break;
+	}
+}
+
 void UI::ChangePos(int Number, float x, float y)
 {
 	for (std::vector<UI::UI_info>::iterator it = m_UI.begin(); it != m_UI.end(); ++it)
@@ -139,6 +154,19 @@ void UI::ChangePos(int Number, float x, float y)
 
 		//変更/変更後は処理する必要がないためループを抜ける
 		(*it).pos = MakeDXf2(x, y);
+		break;
+	}
+}
+
+void UI::ChangeSize(int Number, float x, float y)
+{
+	for (std::vector<UI::UI_info>::iterator it = m_UI.begin(); it != m_UI.end(); ++it)
+	{
+		//指定された番号のデータを変更するため番号と一致するか確認
+		if ((*it).Number != Number) continue;
+
+		//変更/変更後は処理する必要がないためループを抜ける
+		(*it).size = MakeDXf2(x, y);
 		break;
 	}
 }

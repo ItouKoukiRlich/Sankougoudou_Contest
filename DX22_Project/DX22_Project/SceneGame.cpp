@@ -4,6 +4,7 @@
 #include"ShaderList.h"
 #include"Geometory.h"
 #include"Effect.h"
+#include"Input.h"
 
 SceneGame::SceneGame()
 	:m_pCamera(new CameraGame)
@@ -29,9 +30,19 @@ void SceneGame::Update()
 {
 	m_pPlayer->Update();		//プレイヤー
 	m_pCamera->Update();		//ゲーム内カメラ
-	
+	m_MessageWindow.Update();
+
 	//---- エフェクトの更新処理(最後にやる) ----
 	Effect::GetInstance()->Update();
+
+	if (IsKeyTrigger('L'))
+	{
+		m_MessageWindow.Start(MessageWindow::eStart);
+	}
+	if (IsKeyTrigger('K'))
+	{
+		m_MessageWindow.Start(MessageWindow::eMission1);
+	}
 }
 
 void SceneGame::Draw()
@@ -45,6 +56,7 @@ void SceneGame::Draw()
 #endif
 
 	m_pPlayer->Draw();
+	m_MessageWindow.Draw();
 
 	Effect::GetInstance()->Draw();
 }

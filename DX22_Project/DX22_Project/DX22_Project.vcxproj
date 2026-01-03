@@ -155,6 +155,7 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MeshBuffer.cpp" />
+    <ClCompile Include="MessageWindow.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -190,6 +191,7 @@
     <ClInclude Include="Main.h" />
     <ClInclude Include="MathStruct.h" />
     <ClInclude Include="MeshBuffer.h" />
+    <ClInclude Include="MessageWindow.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Scene.h" />

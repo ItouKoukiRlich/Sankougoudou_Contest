@@ -20,6 +20,7 @@ public:
 		DXf2		size;		//サイズ
 		DXf2		scale;		//拡大率
 		DXf2		uv;			//UV座標
+		DXf2		uvSize;		//UVサイズ
 		DXf4		color;		//色
 		float		Angle;		//回転の角度
 		bool		bDraw;		//描画するならtrue
@@ -73,12 +74,28 @@ public:
 	void ChangeUVpos(int Number, float u, float v);
 
 	/// <summary>
+	/// UVサイズを変更
+	/// </summary>
+	/// <param name="Number">：変更したいUIの番号</param>
+	/// <param name="u">：uサイズ値</param>
+	/// <param name="v">：vサイズ値</param>
+	void ChangeUVsize(int Number, float u, float v);
+
+	/// <summary>
 	/// 位置を変更
 	/// </summary>
 	/// <param name="Number">：変更したいUIの番号</param>
 	/// <param name="x">：x座標</param>
 	/// <param name="y">：y座標</param>
 	void ChangePos(int Number, float x, float y);
+
+	/// <summary>
+	/// サイズを変更
+	/// </summary>
+	/// <param name="Number">：変更したいUIの番号</param>
+	/// <param name="x">：横サイズ</param>
+	/// <param name="y">：縦サイズ</param>
+	void ChangeSize(int Number, float x, float y);
 
 	/// <summary>
 	/// 描画する・しない を変更

@@ -16,8 +16,6 @@ Player::Player()
 	,m_pModelLeg(nullptr)
 	,m_Angle(DirectX::XMFLOAT3{0.0f, 0.0f, 0.0f})
 	,m_ArmAngle(0.0f)
-	,efkHandle(-1)
-	,efkHandle2(-1)
 {
 	//---- それぞれの方向の移動量をリセット ----
 	for (int i = 0; i < Player::DirectionMax; i++)
@@ -34,11 +32,6 @@ Player::Player()
 	m_pModelLeg = new Model;
 	if (!m_pModelLeg->Load("Assets/Model/PlayerLeg.fbx", 0.5f))
 		MessageBox(NULL, "PlayerModel_Leg", "Error", MB_OK);
-
-	Effect::GetInstance()->Load(FILEDEM);
-	Effect::GetInstance()->Load(FILEDEM);
-	Effect::GetInstance()->Load(FILEPPP);
-	Effect::GetInstance()->Play(FILEDEM, { 0.0f, 0.0f, 10.0f }, &efkHandle2, true);
 }
 
 Player::~Player()
@@ -52,21 +45,6 @@ void Player::Update()
 {
 	Control();	//操作
 	Move();		//移動計算
-
-	if (IsKeyTrigger('O'))
-	{
-		DirectX::XMFLOAT3 pos = { 0.0f, 0.0f, 10.0f };
-		Effect::GetInstance()->Play(FILEDEM, m_Pos, &efkHandle, true, &m_Pos);
-	}
-	if (IsKeyTrigger('P'))
-	{
-		Effect::GetInstance()->Stop(efkHandle);
-	}
-
-	if (IsKeyTrigger('L'))
-	{
-		Effect::GetInstance()->Stop(efkHandle2);
-	}
 }
 
 void Player::Draw()
@@ -196,9 +174,6 @@ void Player::Move()
 	m_Pos.x += move.x;
 	m_Pos.y += move.y;
 	m_Pos.z += move.z;
-
-	//エフェクトの位置も補正
-	EFK_INS->SetPos(efkHandle, m_Pos);
 
 	//---- プレイヤーの回転 ----
 	//常に正面を向くようにする

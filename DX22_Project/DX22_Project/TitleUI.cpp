@@ -60,10 +60,6 @@ TitleUI::~TitleUI()
 
 void TitleUI::Update()
 {
-	//---- 背景の処理 ----
-	m_BackU -= BackU_deltaValue;
-	m_ui.ChangeUVpos(eBack, m_BackU, 0.0f);
-
 	//---- アニメーションの処理 ----
 	if ((float)m_nAnimeFlameCount < TitleInsertFlame)
 	{
@@ -72,6 +68,11 @@ void TitleUI::Update()
 	//---- アニメーション終了後の処理 ----
 	else
 	{
+		//---- 背景の処理 ----
+		m_BackU -= BackU_deltaValue;
+		m_ui.ChangeUVpos(eBack, m_BackU, 0.0f);
+
+		//---- 歯車の回転 ----
 		m_GearDegree += 1.0f;
 		m_ui.ChangeLotation(eGear1, DegreeToRadian(m_GearDegree));
 		m_ui.ChangeLotation(eGear2, -DegreeToRadian(m_GearDegree));

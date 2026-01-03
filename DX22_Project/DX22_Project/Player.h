@@ -78,9 +78,6 @@ private:
 	float				m_Move[DirectionMax];	//各方向の移動量
 	DirectX::XMFLOAT3	m_Angle;				//プレイヤーの回転量
 	float				m_ArmAngle;				//腕の回転する角度
-	
-	Effekseer::Handle	efkHandle;		//エフェクトのハンドル
-	Effekseer::Handle	efkHandle2;		//エフェクトのハンドル
 };
 
 #endif
