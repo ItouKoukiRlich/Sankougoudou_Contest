@@ -124,9 +124,15 @@
       <Filter>ソース ファイル\SceneTitle</Filter>
     </ClCompile>
     <ClCompile Include="TitleUI.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\SceneTitle</Filter>
     </ClCompile>
     <ClCompile Include="MessageWindow.cpp">
+      <Filter>ソース ファイル\SceneGame</Filter>
+    </ClCompile>
+    <ClCompile Include="GameUI.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerLifeUI.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -218,10 +224,16 @@
     <ClInclude Include="CameraTitle.h">
       <Filter>ヘッダー ファイル\SceneTitle</Filter>
     </ClInclude>
+    <ClInclude Include="MessageWindow.h">
+      <Filter>ヘッダー ファイル\SceneGame</Filter>
+    </ClInclude>
     <ClInclude Include="TitleUI.h">
+      <Filter>ヘッダー ファイル\SceneTitle</Filter>
+    </ClInclude>
+    <ClInclude Include="GameUI.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="MessageWindow.h">
+    <ClInclude Include="PlayerLifeUI.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

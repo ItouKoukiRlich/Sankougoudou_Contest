@@ -17,6 +17,14 @@ SceneGame::SceneGame()
 	m_pPlayer->SetCamera(m_pCamera);		//プレイヤーにカメラを設定
 	m_pCamera->SetPlayer(m_pPlayer);		//カメラ操作時に必要になるプレイヤーのアドレスを渡す
 	EFK_INS->SetCamera(m_pCamera);			//カメラをエフェクト管理クラスに設定
+
+
+	//---- 諸々のインスタンス化が終わり次第Game中のUIを作成 ----
+	//プレイヤー関連のUI
+	if (m_pPlayer)
+	{
+		m_GameUI.CreatePlayerLife(*m_pPlayer);
+	}
 }
 
 SceneGame::~SceneGame()
@@ -29,20 +37,14 @@ SceneGame::~SceneGame()
 void SceneGame::Update()
 {
 	m_pPlayer->Update();		//プレイヤー
-	m_pCamera->Update();		//ゲーム内カメラ
 	m_MessageWindow.Update();
 
+	//---- 諸々の更新処理が終わってからUIに反映 ----
+	m_GameUI.Update();
+
+	m_pCamera->Update();		//ゲーム内カメラ
 	//---- エフェクトの更新処理(最後にやる) ----
 	Effect::GetInstance()->Update();
-
-	if (IsKeyTrigger('L'))
-	{
-		m_MessageWindow.Start(MessageWindow::eStart);
-	}
-	if (IsKeyTrigger('K'))
-	{
-		m_MessageWindow.Start(MessageWindow::eMission1);
-	}
 }
 
 void SceneGame::Draw()
@@ -59,4 +61,11 @@ void SceneGame::Draw()
 	m_MessageWindow.Draw();
 
 	Effect::GetInstance()->Draw();
+
+	RenderTarget* pRTV = GetDefaultRTV();
+	DepthStencil* pDSV = GetDefaultDSV();
+	SetRenderTargets(1, &pRTV, nullptr);
+	m_GameUI.Draw();
+	SetRenderTargets(1, &pRTV, pDSV);
+
 }

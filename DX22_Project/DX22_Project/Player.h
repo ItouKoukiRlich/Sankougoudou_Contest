@@ -8,6 +8,12 @@
 #include"Effekseer.h"
 #include"EffekseerRendererDX11.h"
 
+//==== 定数・マクロ定義 ====
+namespace namePlayer
+{
+	constexpr int cg_InitHp = 100;	//ゲーム開始時のHP
+}
+
 class Player : public GameObject
 {
 public:
@@ -21,6 +27,12 @@ public:
 	/// </summary>
 	/// <param name="pCamera">：カメラのアドレス</param>
 	void SetCamera(CameraGame* pCamera);
+
+	/// <summary>
+	/// プレイヤーのHPを入手
+	/// </summary>
+	/// <returns>：プレイヤーのHP</returns>
+	int GetHP() const;
 
 private:
 	//移動方向の列挙型
@@ -78,6 +90,11 @@ private:
 	float				m_Move[DirectionMax];	//各方向の移動量
 	DirectX::XMFLOAT3	m_Angle;				//プレイヤーの回転量
 	float				m_ArmAngle;				//腕の回転する角度
+
+	Effekseer::Handle m_hdl;
+
+	//ステータス
+	int m_nLife;	//ライフ
 };
 
 #endif

@@ -151,6 +151,7 @@
     <ClCompile Include="DirectX.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameUI.cpp" />
     <ClCompile Include="Geometory.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -158,6 +159,7 @@
     <ClCompile Include="MessageWindow.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerLifeUI.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneGame.cpp" />
     <ClCompile Include="SceneTitle.cpp" />
@@ -186,6 +188,7 @@
     <ClInclude Include="EffekseerRendererDX11.h" />
     <ClInclude Include="Function.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameUI.h" />
     <ClInclude Include="Geometory.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Main.h" />
@@ -194,6 +197,7 @@
     <ClInclude Include="MessageWindow.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerLifeUI.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneGame.h" />
     <ClInclude Include="SceneTitle.h" />

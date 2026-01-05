@@ -5,6 +5,7 @@
 #include"Input.h"
 #include"DirectX.h"
 #include"Effect.h"
+using namespace namePlayer;
 
 #define FILEPPP u"Assets/Effect/Heal.efkefc"
 #define FILEDEM u"Assets/Effect/demo.efkefc"
@@ -16,6 +17,8 @@ Player::Player()
 	,m_pModelLeg(nullptr)
 	,m_Angle(DirectX::XMFLOAT3{0.0f, 0.0f, 0.0f})
 	,m_ArmAngle(0.0f)
+	,m_nLife(cg_InitHp)
+	,m_hdl(-1)
 {
 	//---- それぞれの方向の移動量をリセット ----
 	for (int i = 0; i < Player::DirectionMax; i++)
@@ -32,6 +35,9 @@ Player::Player()
 	m_pModelLeg = new Model;
 	if (!m_pModelLeg->Load("Assets/Model/PlayerLeg.fbx", 0.5f))
 		MessageBox(NULL, "PlayerModel_Leg", "Error", MB_OK);
+
+	EFK_INS->Load(FILEDEM);
+	EFK_INS->Play(FILEDEM, m_Pos, &m_hdl, true, &m_Pos);
 }
 
 Player::~Player()
@@ -45,6 +51,25 @@ void Player::Update()
 {
 	Control();	//操作
 	Move();		//移動計算
+
+	EFK_INS->SetPos(m_hdl, m_Pos);
+
+	if (IsKeyTrigger('M'))
+	{
+		m_nLife--;
+	}
+	if (IsKeyTrigger('N'))
+	{
+		m_nLife++;
+	}
+	if (IsKeyTrigger('L'))
+	{
+		m_nLife -= 10;
+	}
+	if (IsKeyTrigger('K'))
+	{
+		m_nLife += 10;
+	}
 }
 
 void Player::Draw()
@@ -359,4 +384,9 @@ void Player::DrawLeg()
 void Player::SetCamera(CameraGame* pCamera)
 {
 	m_pCamera = pCamera;
+}
+
+int Player::GetHP() const
+{
+	return m_nLife;
 }
