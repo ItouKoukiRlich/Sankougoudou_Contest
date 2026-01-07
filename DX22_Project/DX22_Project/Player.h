@@ -7,6 +7,7 @@
 #include"Model.h"
 #include"Effekseer.h"
 #include"EffekseerRendererDX11.h"
+#include"NormalBullet.h"
 
 //==== 定数・マクロ定義 ====
 namespace namePlayer
@@ -29,10 +30,22 @@ public:
 	void SetCamera(CameraGame* pCamera);
 
 	/// <summary>
+	/// 設定してあるカメラポインタを入手
+	/// </summary>
+	/// <returns>カメラのポインタ</returns>
+	Camera* GetCamera() const;
+
+	/// <summary>
 	/// プレイヤーのHPを入手
 	/// </summary>
 	/// <returns>：プレイヤーのHP</returns>
 	int GetHP() const;
+
+	/// <summary>
+	/// 正面のベクトルを入手
+	/// </summary>
+	/// <returns></returns>
+	DirectX::XMVECTOR GetForwardVec();
 
 private:
 	//移動方向の列挙型
@@ -54,6 +67,9 @@ private:
 	static constexpr float	cm_MaxMove			= 0.05f;			//最高速度
 	const DirectX::XMFLOAT2 cm_ArmPos			= {0.75f, 0.0f};
 	const DirectX::XMFLOAT2 cm_LegPos			= {0.25f, -1.0f};
+
+	//---- 弾関連 ----
+	static constexpr int cm_MaxNormalBullet = 3;	//弾の最大発射数
 
 private:
 	
@@ -93,8 +109,11 @@ private:
 
 	Effekseer::Handle m_hdl;
 
-	//ステータス
+	//---- ステータス ----
 	int m_nLife;	//ライフ
+
+	//---- 弾 ----
+	NormalBullet* m_pBullet[cm_MaxNormalBullet];	//通常弾の配列
 };
 
 #endif

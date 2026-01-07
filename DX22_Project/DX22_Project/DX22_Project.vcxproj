@@ -143,10 +143,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CameraDebug.cpp" />
     <ClCompile Include="CameraGame.cpp" />
     <ClCompile Include="CameraTitle.cpp" />
+    <ClCompile Include="Collision.cpp" />
     <ClCompile Include="DebugBlock.cpp" />
     <ClCompile Include="DirectX.cpp" />
     <ClCompile Include="Effect.cpp" />
@@ -158,6 +160,7 @@
     <ClCompile Include="MeshBuffer.cpp" />
     <ClCompile Include="MessageWindow.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="NormalBullet.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerLifeUI.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -174,10 +177,12 @@
     <ClCompile Include="_model.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bullet.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraDebug.h" />
     <ClInclude Include="CameraGame.h" />
     <ClInclude Include="CameraTitle.h" />
+    <ClInclude Include="Collision.h" />
     <ClInclude Include="DebugBlock.h" />
     <ClInclude Include="Defines.h" />
     <ClInclude Include="DirectX.h" />
@@ -196,6 +201,7 @@
     <ClInclude Include="MeshBuffer.h" />
     <ClInclude Include="MessageWindow.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="NormalBullet.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerLifeUI.h" />
     <ClInclude Include="Scene.h" />

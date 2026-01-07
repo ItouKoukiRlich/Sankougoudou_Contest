@@ -20,10 +20,15 @@ Player::Player()
 	,m_nLife(cg_InitHp)
 	,m_hdl(-1)
 {
+	//---- 通常弾の確保 ----
+	for (int i = 0; i < cm_MaxNormalBullet; ++i)
+		m_pBullet[i] = new NormalBullet(this);
+
 	//---- それぞれの方向の移動量をリセット ----
 	for (int i = 0; i < Player::DirectionMax; i++)
 		m_Move[i] = 0.0f;
 
+	//---- モデルの確保 ----
 	m_pModelBody = new Model;
 	if (!m_pModelBody->Load("Assets/Model/PlayerBody.fbx", 1.0f))
 		MessageBox(NULL, "PlayerModel_Body", "Error", MB_OK);
@@ -42,6 +47,8 @@ Player::Player()
 
 Player::~Player()
 {
+	for (int i = 0; i < cm_MaxNormalBullet; ++i)
+		SAFEDELETE(m_pBullet[i]);
 	SAFEDELETE(m_pModelLeg);
 	SAFEDELETE(m_pModelArm);
 	SAFEDELETE(m_pModelBody);
@@ -49,8 +56,13 @@ Player::~Player()
 
 void Player::Update()
 {
+	//---- プレイヤーの更新処理 ----
 	Control();	//操作
 	Move();		//移動計算
+
+	//---- 弾の更新処理 ----
+	for (int i = 0; i < cm_MaxNormalBullet; ++i)
+		m_pBullet[i]->Update();
 
 	EFK_INS->SetPos(m_hdl, m_Pos);
 
@@ -70,6 +82,19 @@ void Player::Update()
 	{
 		m_nLife += 10;
 	}
+
+	if (IsKeyTrigger(VK_SPACE))
+	{
+		for (int i = 0; i < cm_MaxNormalBullet; ++i)
+		{
+			//発射中か確認
+			if (m_pBullet[i]->GetActive()) continue;
+
+			m_pBullet[i]->CreateBullet();
+			break;
+		}
+		
+	}
 }
 
 void Player::Draw()
@@ -77,6 +102,8 @@ void Player::Draw()
 	DrawBody();	//本体
 	DrawArm();	//腕
 	DrawLeg();	//足
+	for (int i = 0; i < cm_MaxNormalBullet; ++i)
+		m_pBullet[i]->Draw();
 }
 
 void Player::Control()
@@ -386,7 +413,23 @@ void Player::SetCamera(CameraGame* pCamera)
 	m_pCamera = pCamera;
 }
 
+Camera* Player::GetCamera() const
+{
+	return m_pCamera;
+}
+
 int Player::GetHP() const
 {
 	return m_nLife;
+}
+
+DirectX::XMVECTOR Player::GetForwardVec()
+{
+	DirectX::XMFLOAT3 look			= m_pCamera->GetLook();								//注視点を入手
+	DirectX::XMVECTOR LookVec		= DirectX::XMLoadFloat3(&look);						//注視点のベクトル
+	DirectX::XMVECTOR PlayerVec		= DirectX::XMLoadFloat3(&m_Pos);					//プレイヤーベクトル
+	DirectX::XMVECTOR vecForward	= DirectX::XMVectorSubtract(LookVec, PlayerVec);	//前方ベクトル
+	vecForward = DirectX::XMVector3Normalize(vecForward);								//正規化
+
+	return vecForward;
 }

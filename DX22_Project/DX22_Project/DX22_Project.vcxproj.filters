@@ -46,6 +46,12 @@
     <Filter Include="ヘッダー ファイル\SceneTitle">
       <UniqueIdentifier>{d9d034e7-0f12-4d2f-a801-15c304ff6d48}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\SceneGame\GameUI">
+      <UniqueIdentifier>{aa47ab2d-62a0-4a8e-a45a-3d39e360bcc2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\SceneGame\GameUI">
+      <UniqueIdentifier>{1382cab6-c04b-4e41-a031-eac3bf19093f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sprite.cpp">
@@ -129,10 +135,19 @@
     <ClCompile Include="MessageWindow.cpp">
       <Filter>ソース ファイル\SceneGame</Filter>
     </ClCompile>
-    <ClCompile Include="GameUI.cpp">
+    <ClCompile Include="Collision.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="GameUI.cpp">
+      <Filter>ソース ファイル\SceneGame\GameUI</Filter>
+    </ClCompile>
     <ClCompile Include="PlayerLifeUI.cpp">
+      <Filter>ソース ファイル\SceneGame\GameUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="NormalBullet.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -230,10 +245,19 @@
     <ClInclude Include="TitleUI.h">
       <Filter>ヘッダー ファイル\SceneTitle</Filter>
     </ClInclude>
-    <ClInclude Include="GameUI.h">
+    <ClInclude Include="Collision.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="GameUI.h">
+      <Filter>ヘッダー ファイル\SceneGame\GameUI</Filter>
+    </ClInclude>
     <ClInclude Include="PlayerLifeUI.h">
+      <Filter>ヘッダー ファイル\SceneGame\GameUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="NormalBullet.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
