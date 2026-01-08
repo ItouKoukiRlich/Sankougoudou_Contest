@@ -210,6 +210,19 @@ void UI::AddScale(int Number, float x, float y)
 	}
 }
 
+void UI::AddUVpos(int Number, float x, float y)
+{
+	for (std::vector<UI::UI_info>::iterator it = m_UI.begin(); it != m_UI.end(); ++it)
+	{
+		//指定された番号のデータを変更するため番号と一致するか確認
+		if ((*it).Number != Number) continue;
+
+		//変更/変更後は処理する必要がないためループを抜ける
+		(*it).uv = MakeDXf2((*it).uv.x + x, (*it).uv.y + y);
+		break;
+	}
+}
+
 DirectX::XMFLOAT2 UI::GetSize(int Number)
 {
 	for (std::vector<UI::UI_info>::iterator it = m_UI.begin(); it != m_UI.end(); ++it)

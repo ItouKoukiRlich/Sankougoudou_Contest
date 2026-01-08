@@ -41,6 +41,10 @@ Player::Player()
 	if (!m_pModelLeg->Load("Assets/Model/PlayerLeg.fbx", 0.5f))
 		MessageBox(NULL, "PlayerModel_Leg", "Error", MB_OK);
 
+	//---- 当たり判定 ----
+	m_Collision.center = m_Pos;
+	m_Collision.radius = 0.5f;
+
 	EFK_INS->Load(FILEDEM);
 	EFK_INS->Play(FILEDEM, m_Pos, &m_hdl, true, &m_Pos);
 }
@@ -226,6 +230,9 @@ void Player::Move()
 	m_Pos.x += move.x;
 	m_Pos.y += move.y;
 	m_Pos.z += move.z;
+
+	//---- 当たり判定の位置も更新 ----
+	m_Collision.center = m_Pos;
 
 	//---- プレイヤーの回転 ----
 	//常に正面を向くようにする
@@ -421,6 +428,23 @@ Camera* Player::GetCamera() const
 int Player::GetHP() const
 {
 	return m_nLife;
+}
+
+void Player::MinusHP(int damage)
+{
+	m_nLife -= damage;
+	if (m_nLife < 0) m_nLife = 0;
+}
+
+void Player::AddHP(int hp)
+{
+	m_nLife += hp;
+	if (m_nLife > 100) m_nLife = 100;
+}
+
+Collision::Sphere Player::GetCollision() const
+{
+	return m_Collision;
 }
 
 DirectX::XMVECTOR Player::GetForwardVec()

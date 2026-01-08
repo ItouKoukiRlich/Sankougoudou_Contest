@@ -121,6 +121,14 @@ public:
 	void AddScale(int Number, float x, float y);
 
 	/// <summary>
+	/// インクルード部
+	/// </summary>
+	/// <param name="Number">：変更したいUIの番号</param>
+	/// <param name="x">：U座標に足す値</param>
+	/// <param name="y">：V座標に足す値</param>
+	void AddUVpos(int Number, float x, float y);
+
+	/// <summary>
 	///	サイズを入手
 	/// </summary>
 	/// <param name="Number">：入手したいデータUIの番号</param>

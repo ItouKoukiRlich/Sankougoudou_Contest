@@ -152,6 +152,7 @@
     <ClCompile Include="DebugBlock.cpp" />
     <ClCompile Include="DirectX.cpp" />
     <ClCompile Include="Effect.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameUI.cpp" />
     <ClCompile Include="Geometory.cpp" />
@@ -161,6 +162,7 @@
     <ClCompile Include="MessageWindow.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="NormalBullet.cpp" />
+    <ClCompile Include="NormalEnemyBullet.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerLifeUI.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -170,9 +172,11 @@
     <ClCompile Include="ShaderList.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Startup.cpp" />
+    <ClCompile Include="TurretEnemy.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TitleUI.cpp" />
     <ClCompile Include="UI.cpp" />
+    <ClCompile Include="WarningUI.cpp" />
     <ClCompile Include="_geometory.cpp" />
     <ClCompile Include="_model.cpp" />
   </ItemGroup>
@@ -191,6 +195,7 @@
     <ClInclude Include="Effekseer.Modules.h" />
     <ClInclude Include="Effekseer.SIMD.h" />
     <ClInclude Include="EffekseerRendererDX11.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Function.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameUI.h" />
@@ -202,6 +207,7 @@
     <ClInclude Include="MessageWindow.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="NormalBullet.h" />
+    <ClInclude Include="NormalEnemyBullet.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerLifeUI.h" />
     <ClInclude Include="Scene.h" />
@@ -210,9 +216,11 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderList.h" />
     <ClInclude Include="Sprite.h" />
+    <ClInclude Include="TurretEnemy.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TitleUI.h" />
     <ClInclude Include="UI.h" />
+    <ClInclude Include="WarningUI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

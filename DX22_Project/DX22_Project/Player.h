@@ -8,6 +8,7 @@
 #include"Effekseer.h"
 #include"EffekseerRendererDX11.h"
 #include"NormalBullet.h"
+#include"Collision.h"
 
 //==== 定数・マクロ定義 ====
 namespace namePlayer
@@ -40,6 +41,20 @@ public:
 	/// </summary>
 	/// <returns>：プレイヤーのHP</returns>
 	int GetHP() const;
+
+	/// <summary>
+	/// HPを減少させる
+	/// </summary>
+	/// <param name="damage">：減少させる値</param>
+	void MinusHP(int damage);
+
+	/// <summary>
+	/// HPを増やす
+	/// </summary>
+	/// <param name="hp">：増やす値</param>
+	void AddHP(int hp);
+
+	Collision::Sphere GetCollision() const;
 
 	/// <summary>
 	/// 正面のベクトルを入手
@@ -107,6 +122,7 @@ private:
 	DirectX::XMFLOAT3	m_Angle;				//プレイヤーの回転量
 	float				m_ArmAngle;				//腕の回転する角度
 
+	Collision::Sphere	m_Collision;			//プレイヤーの当たり判定
 	Effekseer::Handle m_hdl;
 
 	//---- ステータス ----

@@ -11,7 +11,7 @@ class NormalBullet : public Bullet
 {
 public:
 	NormalBullet(Player* pPlayer);
-	~NormalBullet();
+	~NormalBullet() override;
 	void Update() override;
 	void Draw() override;
 	void CreateBullet() override;

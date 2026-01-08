@@ -2,6 +2,8 @@
 #include "DebugBlock.h"
 #include"Defines.h"
 #include"ShaderList.h"
+#include"Function.h"
+#include"Geometory.h"
 
 DebugBlock::DebugBlock()
 	:m_pModel(nullptr)
@@ -52,4 +54,9 @@ void DebugBlock::Draw(DirectX::XMFLOAT3 pos, Camera* pCamera)
 		// ƒ‚ƒfƒ‹‚Ì•`‰æ 
 		m_pModel->Draw(i);
 	}
+}
+
+void DebugBlock::DrawGeometry(DirectX::XMFLOAT3 pos, DirectX::XMFLOAT3 size)
+{
+	CreateBox(pos, size, { 0.0f, 0.0f, 0.0f });
 }

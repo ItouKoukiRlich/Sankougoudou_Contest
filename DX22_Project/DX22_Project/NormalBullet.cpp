@@ -4,11 +4,10 @@
 #include"Player.h"
 #include"Effect.h"
 
-//==== 定数・マクロ定義 ====
-#define NormalBulletEffect u"Assets/Effect/NormalBullet.efkefc"
-
 Player* NormalBullet::m_pPlayer = nullptr;
 
+//==== 定数・マクロ定義 ====
+#define NormalBulletEffect u"Assets/Effect/NormalBullet.efkefc"
 namespace nameNormalBullete
 {
 	constexpr float cg_DeltaMove		= 0.05f;	//1フレームの移動量

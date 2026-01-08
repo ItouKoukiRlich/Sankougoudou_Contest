@@ -52,6 +52,18 @@
     <Filter Include="ヘッダー ファイル\SceneGame\GameUI">
       <UniqueIdentifier>{1382cab6-c04b-4e41-a031-eac3bf19093f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\SceneGame\Bullet">
+      <UniqueIdentifier>{134c4f88-2a66-452b-844a-114b952b93df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\SceneGame\Bullet">
+      <UniqueIdentifier>{3a2b21c4-4c08-44b2-aeb5-8905bbb05d1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\SceneGame\Enemy">
+      <UniqueIdentifier>{417ad541-b98f-46e9-9b23-81ef3b6b346b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\SceneGame\Enemy">
+      <UniqueIdentifier>{74e9f374-6022-41b8-9716-5044cb6939cb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sprite.cpp">
@@ -145,10 +157,22 @@
       <Filter>ソース ファイル\SceneGame\GameUI</Filter>
     </ClCompile>
     <ClCompile Include="Bullet.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\SceneGame\Bullet</Filter>
     </ClCompile>
     <ClCompile Include="NormalBullet.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\SceneGame\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="WarningUI.cpp">
+      <Filter>ソース ファイル\SceneGame\GameUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>ソース ファイル\SceneGame\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="TurretEnemy.cpp">
+      <Filter>ソース ファイル\SceneGame\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="NormalEnemyBullet.cpp">
+      <Filter>ソース ファイル\SceneGame\Bullet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -255,10 +279,22 @@
       <Filter>ヘッダー ファイル\SceneGame\GameUI</Filter>
     </ClInclude>
     <ClInclude Include="Bullet.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\SceneGame\Bullet</Filter>
     </ClInclude>
     <ClInclude Include="NormalBullet.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\SceneGame\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="WarningUI.h">
+      <Filter>ヘッダー ファイル\SceneGame\GameUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>ヘッダー ファイル\SceneGame\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="TurretEnemy.h">
+      <Filter>ヘッダー ファイル\SceneGame\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="NormalEnemyBullet.h">
+      <Filter>ヘッダー ファイル\SceneGame\Bullet</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

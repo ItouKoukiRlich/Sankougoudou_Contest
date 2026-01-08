@@ -13,6 +13,8 @@ public:
 	~DebugBlock();
 	void Draw(DirectX::XMFLOAT3 pos, Camera* pCamera);
 
+	void DrawGeometry(DirectX::XMFLOAT3 pos, DirectX::XMFLOAT3 size);
+
 private:
 	Model*	m_pModel;
 };
