@@ -12,7 +12,7 @@
 //==== 定数・マクロ定義 ====
 namespace nameSceneGame
 {
-	constexpr DXf3 cg_FieldSize		= { 100.0f, 500.0f , 100.0f };			//フィールドのサイズ
+	constexpr DXf3 cg_FieldSize		= { 1000.0f, 1000.0f , 1000.0f };			//フィールドのサイズ
 	constexpr DXf3 cg_FieldHarfSize = { cg_FieldSize.x * 0.5f, cg_FieldSize.y * 0.5f , cg_FieldSize.z * 0.5f};
 }
 

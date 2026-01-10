@@ -9,6 +9,7 @@
 #include"TurretEnemy.h"
 #include"NormalEnemyBullet.h"
 #include"Collision.h"
+#include"EnemyIcon.h"
 using namespace nameSceneGame;
 using namespace nmEnemyArray;
 
@@ -23,10 +24,10 @@ SceneGame::SceneGame()
 	SetDepthTest(true);						//奥行を認知
 	Enemy::SetCamera(m_pCamera);
 	TurretEnemy::SetPlayer(m_pPlayer);
+	EnemyIcon::SetCamera(m_pCamera);
 	m_pPlayer->SetCamera(m_pCamera);		//プレイヤーにカメラを設定
 	m_pCamera->SetPlayer(m_pPlayer);		//カメラ操作時に必要になるプレイヤーのアドレスを渡す
 	EFK_INS->SetCamera(m_pCamera);			//カメラをエフェクト管理クラスに設定
-	NEB::SetCamera(m_pPlayer);
 
 	for (int i = 0; i < cg_MaxEnemy; i++)
 	{
@@ -82,33 +83,37 @@ void SceneGame::Update()
 		{
 			Bullet* pBullet = m_pEnemy[i]->GetBullet();		//弾のポインタを持ってくる
 
-			switch (num)
+			//---- 弾とプレイヤーを比べる(無敵なら処理しない) ----
+			if (!m_pPlayer->GetBarrier())
 			{
-			case 1:
-				if (pBullet->GetActive())
+				switch (num)
 				{
-					result = Collision::Hit(pBullet->GetCollision(), PlayerCollision);
-					if (result.isHit)
+				case 1:
+					if (pBullet->GetActive())
 					{
-						m_pPlayer->MinusHP(pBullet->GetDamage());
-						pBullet->Stop();
-					}
-				}
-				break;
-
-			default:
-				for (int i = 0; i < num; ++i) {
-					if (pBullet[num].GetActive())
-					{
-						result = Collision::Hit(pBullet[num].GetCollision(), PlayerCollision);
+						result = Collision::Hit(pBullet->GetCollision(), PlayerCollision);
 						if (result.isHit)
 						{
-							m_pPlayer->MinusHP(pBullet[num].GetDamage());
-							pBullet[num].Stop();
+							m_pPlayer->MinusHP(pBullet->GetDamage());
+							pBullet->Stop();
 						}
 					}
+					break;
+
+				default:
+					for (int i = 0; i < num; ++i) {
+						if (pBullet[num].GetActive())
+						{
+							result = Collision::Hit(pBullet[num].GetCollision(), PlayerCollision);
+							if (result.isHit)
+							{
+								m_pPlayer->MinusHP(pBullet[num].GetDamage());
+								pBullet[num].Stop();
+							}
+						}
+					}
+					break;
 				}
-				break;
 			}
 		}
 

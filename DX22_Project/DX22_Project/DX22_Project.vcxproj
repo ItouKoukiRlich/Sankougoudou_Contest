@@ -153,6 +153,7 @@
     <ClCompile Include="DirectX.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyIcon.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameUI.cpp" />
     <ClCompile Include="Geometory.cpp" />
@@ -165,11 +166,14 @@
     <ClCompile Include="NormalEnemyBullet.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerLifeUI.cpp" />
+    <ClCompile Include="Player_normal.cpp" />
+    <ClCompile Include="Player_speed.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneGame.cpp" />
     <ClCompile Include="SceneTitle.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderList.cpp" />
+    <ClCompile Include="SpeedBullet.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Startup.cpp" />
     <ClCompile Include="TurretEnemy.cpp" />
@@ -196,6 +200,7 @@
     <ClInclude Include="Effekseer.SIMD.h" />
     <ClInclude Include="EffekseerRendererDX11.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyIcon.h" />
     <ClInclude Include="Function.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameUI.h" />
@@ -215,6 +220,7 @@
     <ClInclude Include="SceneTitle.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderList.h" />
+    <ClInclude Include="SpeedBullet.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="TurretEnemy.h" />
     <ClInclude Include="Texture.h" />

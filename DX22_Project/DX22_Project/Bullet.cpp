@@ -7,10 +7,8 @@ Bullet::Bullet()
 	,m_nActiveCount(0)
 	,m_handle(-1)
 	,m_nDamage(1)
+	,m_move({0.0f, 0.0f, 0.0f})
 {
-	DirectX::XMFLOAT3 f3 = { 0.0f, 0.0f, 0.0f };
-	m_Vec = DirectX::XMLoadFloat3(&f3);
-
 	m_Collision.center = m_Pos;
 	m_Collision.radius = 0.5f;	//デフォルトで0.5f
 }

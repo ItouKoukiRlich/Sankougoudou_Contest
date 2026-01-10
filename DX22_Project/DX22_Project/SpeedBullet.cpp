@@ -1,26 +1,25 @@
 //==== インクルード部 ====
-#include"NormalBullet.h"
-#include"Effect.h"
+#include "SpeedBullet.h"
 
 //==== 定数・マクロ定義 ====
-#define NormalBulletEffect u"Assets/Effect/NormalBullet.efkefc"
-namespace nameNormalBullete
+#define SpeedBulletEffect u"Assets/Effect/SpeedBullet.efkefc"
+namespace nameSpeedBullete
 {
-	constexpr float cg_DeltaMove		= 1.0f;	//移動量
-	constexpr int	cg_FlameToDestroy	= 30;	//何フレーム後に消えるか
+	constexpr float cg_DeltaMove = 2.0f;	//移動量
+	constexpr int	cg_FlameToDestroy = 30;	//何フレーム後に消えるか
 }
-using namespace nameNormalBullete;
+using namespace nameSpeedBullete;
 
-NormalBullet::NormalBullet()
+SpeedBullet::SpeedBullet()
 {
-	EFK_INS->Load(NormalBulletEffect);
-}
-
-NormalBullet::~NormalBullet()
-{
+	EFK_INS->Load(SpeedBulletEffect);
 }
 
-void NormalBullet::Update()
+SpeedBullet::~SpeedBullet()
+{
+}
+
+void SpeedBullet::Update()
 {
 	if (!m_bActive) return;	//発射していないなら処理しない
 
@@ -40,16 +39,16 @@ void NormalBullet::Update()
 	}
 }
 
-void NormalBullet::Draw()
+void SpeedBullet::Draw()
 {
 }
 
-void NormalBullet::CreateBullet(DirectX::XMVECTOR vec, DirectX::XMFLOAT3 pos)
+void SpeedBullet::CreateBullet(DirectX::XMVECTOR vec, DirectX::XMFLOAT3 pos)
 {
 	DirectX::XMStoreFloat3(&m_move, DirectX::XMVectorScale(vec, cg_DeltaMove));
 	m_Pos				= pos;	//位置を設定
 	m_Collision.center	= pos;	//位置を設定
 	m_bActive			= true;	//発射中にする
 	m_nActiveCount		= 0;	//カウントを初期化
-	EFK_INS->Play(NormalBulletEffect, pos, &m_handle, true, &m_Pos);
+	EFK_INS->Play(SpeedBulletEffect, pos, &m_handle, true, &m_Pos);
 }

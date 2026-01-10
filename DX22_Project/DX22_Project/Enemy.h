@@ -6,6 +6,7 @@
 #include"Bullet.h"
 #include"Model.h"
 #include"Camera.h"
+#include"EnemyIcon.h"
 
 class Enemy : public GameObject
 {
@@ -45,12 +46,14 @@ protected:
 	static Camera* m_pCamera;
 
 protected:
-	int		m_nLife;		//HP
-	DXf3	m_Angle;		//回転の角度
-	Bullet* m_pBullet;		//弾
-	Model*	m_pModel;		//モデル
-	bool	m_bActive;		//フィールドに生成しているならtrue
-	int		m_nBulletNum;	//弾の数
+	int			m_nLife;		//HP
+	DXf3		m_Angle;		//回転の角度
+	Bullet*		m_pBullet;		//弾
+	Model*		m_pModel;		//モデル
+	bool		m_bActive;		//フィールドに生成しているならtrue
+	int			m_nBulletNum;	//弾の数
+	EnemyIcon	m_Icon;			//アイコン
+	bool		m_bMission;		//ミッション対象ならtrue
 };
 
 #endif

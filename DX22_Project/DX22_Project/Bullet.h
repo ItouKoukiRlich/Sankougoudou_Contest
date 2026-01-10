@@ -53,7 +53,7 @@ public:
 
 protected:
 	int					m_nDamage;		//威力
-	DirectX::XMVECTOR	m_Vec;			//進むベクトル
+	DirectX::XMFLOAT3	m_move;			//進む方向
 	bool				m_bActive;		//発射していたらtrue
 	int					m_nActiveCount;	//発射してから何フレーム経つかのカウント
 	Effekseer::Handle	m_handle;		//エフェクトのハンドル

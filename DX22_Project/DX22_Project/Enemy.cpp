@@ -11,6 +11,7 @@ Enemy::Enemy()
 	,m_bActive(false)
 	,m_pModel(nullptr)
 	,m_nBulletNum(0)
+	,m_bMission(false)
 {
 
 }
@@ -64,6 +65,8 @@ void Enemy::Draw()
 		// ƒ‚ƒfƒ‹‚Ì•`‰æ 
 		m_pModel->Draw(i);
 	}
+
+	if (m_bMission) m_Icon.Draw();
 }
 
 bool Enemy::CheckActive() const
@@ -75,6 +78,7 @@ void Enemy::CreateEnemy(DXf3 pos)
 {
 	m_bActive	= true;
 	m_Pos		= pos;
+	m_Icon.SetPos({pos.x, pos.y + 1.0f, pos.z});
 }
 
 int Enemy::GetBulletNum() const

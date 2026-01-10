@@ -2,8 +2,6 @@
 #include"NormalEnemyBullet.h"
 #include"TurretEnemy.h"
 
-Player* NormalEnemyBullet::m_pPlayer = nullptr;
-
 //==== 定数・マクロ定義 ====
 #define EnemyNormalBulletEffect u"Assets/Effect/NormalEnemyBullet.efkefc"
 namespace nameNormalEnemyBullete
@@ -28,16 +26,10 @@ void NormalEnemyBullet::Update()
 {
 	if (!m_bActive) return;
 
-	//ベクトルを元に前進
-	DirectX::XMVECTOR v = m_Vec;
-	DirectX::XMVectorScale(v, cg_DeltaMove);
-	DirectX::XMFLOAT3 move;
-	DirectX::XMStoreFloat3(&move, v);
-
 	//弾の位置を設定
-	m_Pos.x += move.x;
-	m_Pos.y += move.y;
-	m_Pos.z += move.z;
+	m_Pos.x += m_move.x;
+	m_Pos.y += m_move.y;
+	m_Pos.z += m_move.z;
 
 	//当たり判定を更新
 	m_Collision.center = m_Pos;
@@ -65,14 +57,10 @@ void NormalEnemyBullet::CreateBullet()
 
 void NormalEnemyBullet::CreateBullet(DirectX::XMVECTOR vec, DirectX::XMFLOAT3 pos)
 {
-	m_Pos = pos;		//位置を設定
-	m_Vec = vec;		//ベクトルを設定
-	m_bActive = true;	//発射中にする
-	m_nActiveCount = 0;	//カウントを初期化
+	DirectX::XMStoreFloat3(&m_move, DirectX::XMVectorScale(vec, cg_DeltaMove));
+	m_Pos				= pos;	//位置を設定
+	m_Collision.center	= pos;	//位置を設定
+	m_bActive		= true;	//発射中にする
+	m_nActiveCount	= 0;	//カウントを初期化
 	EFK_INS->Play(EnemyNormalBulletEffect, m_Pos, &m_handle, true, &m_Pos);
-}
-
-void NEB::SetCamera(Player* pPlayer)
-{
-	m_pPlayer = pPlayer;
 }

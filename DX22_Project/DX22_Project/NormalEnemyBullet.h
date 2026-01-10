@@ -16,10 +16,6 @@ public:
 	void Draw() override;
 	void CreateBullet() override;
 	void CreateBullet(DirectX::XMVECTOR vec, DirectX::XMFLOAT3 pos) override;
-	static void SetCamera(Player* pPlayer);
-
-private:
-	static Player* m_pPlayer;
 };
 
 #endif

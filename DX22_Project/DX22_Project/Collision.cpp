@@ -93,3 +93,47 @@ Collision::Result Collision::Hit(Sphere a, Sphere b)
 
     return out;
 }
+
+Collision::Result Collision::Hit(Sphere a, Box b)
+{
+    Result out = {};
+
+    //---- â~Ç©ÇÁç≈Ç‡ãﬂÇ¢éläpå`ÇÃì_ÇãÅÇﬂÇÈ ----
+    DirectX::XMFLOAT3 HarfSize = { b.size.x * 0.5f, b.size.y * 0.5f, b.size.z * 0.5f };
+    DirectX::XMFLOAT3 BoxMin = {
+        b.center.x - HarfSize.x,
+        b.center.y - HarfSize.y,
+        b.center.z - HarfSize.z,
+    };
+    DirectX::XMFLOAT3 BoxMax = {
+       b.center.x + HarfSize.x,
+       b.center.y + HarfSize.y,
+       b.center.z + HarfSize.z,
+    };
+    DirectX::XMFLOAT3 clamp = {};
+    clamp.x = Clamp(a.center.x, BoxMin.x, BoxMax.x);
+    clamp.y = Clamp(a.center.y, BoxMin.y, BoxMax.y);
+    clamp.z = Clamp(a.center.z, BoxMin.z, BoxMax.z);
+    DirectX::XMVECTOR Pos = DirectX::XMLoadFloat3(&clamp);
+
+    //---- ç≈Ç‡ãﬂÇ¢ì_Ç∆â~ÇÃãóó£ÇãÅÇﬂÇÈ ----
+    DirectX::XMVECTOR PosCircle = DirectX::XMLoadFloat3(&a.center);
+    DirectX::XMVECTOR Vec       = DirectX::XMVectorSubtract(Pos, PosCircle);
+    DirectX::XMVECTOR Length    = DirectX::XMVector3Length(Vec);
+    float fLength;
+    DirectX::XMStoreFloat(&fLength, Length);
+
+    //---- ãóó£Ç™îºåaÇÊÇËÇ‡è¨Ç≥ÇØÇÍÇŒìñÇΩÇ¡ÇƒÇ¢ÇÈ ----
+    if (fLength < a.radius) out.isHit = true;
+    else out.isHit = false;
+
+    return out;
+}
+
+float Collision::Clamp(float num, float min, float max)
+{
+    if (num < min) num = min;
+    else if (num > max) num = max;
+
+    return num;
+}

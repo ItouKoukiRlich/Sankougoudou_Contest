@@ -1,17 +1,18 @@
-#ifndef ___NORMALBULLET_H___
-#define ___NORMALBULLET_H___
+#ifndef ___SPEEDBULLET_H___
+#define ___SPEEDBULLET_H___
 
 //==== インクルード部 ====
 #include"Bullet.h"
 
-class NormalBullet : public Bullet
+class SpeedBullet : public Bullet
 {
 public:
-	NormalBullet();
-	~NormalBullet() override;
+	SpeedBullet();
+	~SpeedBullet() override;
 	void Update() override;
 	void Draw() override;
 	void CreateBullet(DirectX::XMVECTOR vec, DirectX::XMFLOAT3 pos) override;
+
 private:
 
 };

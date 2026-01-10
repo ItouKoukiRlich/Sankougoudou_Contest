@@ -6,7 +6,7 @@
 
 CameraGame::CameraGame()
 	:m_radXZ(180.0f)
-	,m_radY(30.0f)
+	,m_radY(namePlayer::cg_RadYnormal)
 	,m_radius(5.0f)
 	,m_Degree(-45.0f)
 	,m_pPlayer(nullptr)
@@ -42,8 +42,14 @@ void CameraGame::Update()
 	//---- カメラの回り込みの移動 ----
 	if (IsKeyPress(VK_LEFT))	{ m_Degree--; };
 	if (IsKeyPress(VK_RIGHT))	{ m_Degree++; };
-	if (IsKeyPress(VK_UP))		{ m_radY  += 1.0f; };
-	if (IsKeyPress(VK_DOWN))	{ m_radY  -= 1.0f; };
+	if (IsKeyPress(VK_UP)){ 
+		m_radY  += 1.0f; 
+		if (m_radY > 90.0f)m_radY = 90.0f;
+	};
+	if (IsKeyPress(VK_DOWN)){ 
+		m_radY  -= 1.0f; 
+		if (m_radY < -90.0f)m_radY = -90.0f;
+	};
 
 
 	//カメラの位置の計算
@@ -68,4 +74,14 @@ void CameraGame::Draw()
 void CameraGame::SetPlayer(Player* pPlayer)
 {
 	m_pPlayer = pPlayer;
+}
+
+float CameraGame::GetRadY() const
+{
+	return m_radY;
+}
+
+void CameraGame::AddRadY(float angle)
+{
+	m_radY += DirectX::XMConvertToRadians(angle);
 }

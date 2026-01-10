@@ -64,6 +64,9 @@
     <Filter Include="ヘッダー ファイル\SceneGame\Enemy">
       <UniqueIdentifier>{74e9f374-6022-41b8-9716-5044cb6939cb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\SceneGame\Player">
+      <UniqueIdentifier>{934fb282-4ec9-4dd5-84c9-edb5f13b922b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sprite.cpp">
@@ -123,9 +126,6 @@
     <ClCompile Include="Effect.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>ソース ファイル\SceneGame</Filter>
-    </ClCompile>
     <ClCompile Include="SceneGame.cpp">
       <Filter>ソース ファイル\SceneGame</Filter>
     </ClCompile>
@@ -172,6 +172,21 @@
       <Filter>ソース ファイル\SceneGame\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="NormalEnemyBullet.cpp">
+      <Filter>ソース ファイル\SceneGame\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>ソース ファイル\SceneGame\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Player_speed.cpp">
+      <Filter>ソース ファイル\SceneGame\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyIcon.cpp">
+      <Filter>ソース ファイル\SceneGame\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Player_normal.cpp">
+      <Filter>ソース ファイル\SceneGame\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="SpeedBullet.cpp">
       <Filter>ソース ファイル\SceneGame\Bullet</Filter>
     </ClCompile>
   </ItemGroup>
@@ -294,6 +309,12 @@
       <Filter>ヘッダー ファイル\SceneGame\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="NormalEnemyBullet.h">
+      <Filter>ヘッダー ファイル\SceneGame\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyIcon.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="SpeedBullet.h">
       <Filter>ヘッダー ファイル\SceneGame\Bullet</Filter>
     </ClInclude>
   </ItemGroup>

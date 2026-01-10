@@ -22,10 +22,20 @@ public:
 	/// <param name="pPlayer">：プレイヤーのアドレス</param>
 	void SetPlayer(Player* pPlayer);
 
-	//DirectX::XMFLOAT3 GetLook();
+	/// <summary>
+	/// 縦の角度を入手
+	/// </summary>
+	/// <returns></returns>
+	float GetRadY() const;
+
+	/// <summary>
+	/// 縦の角度に加算
+	/// </summary>
+	/// <param name="angle"></param>
+	void AddRadY(float angle);
 
 private:
-	static constexpr float	cm_PlayerAndCameraRadius = 2.0f;
+	static constexpr float	cm_PlayerAndCameraRadius = 4.0f;
 	const float				cm_Move		= 0.1f;						//移動量
 	const DirectX::XMFLOAT3 cm_InitPos	= { 0.0f, 0.0f, -1.0f };	//回転抜きの初期位置
 

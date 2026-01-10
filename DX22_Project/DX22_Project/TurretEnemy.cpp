@@ -8,7 +8,7 @@ using namespace nameTarretEnemy;
 Player* TurretEnemy::m_pPlayer = nullptr;
 
 TurretEnemy::TurretEnemy()
-	:m_nCount(cg_nShotCountMax)	//最初から発射可能
+	:m_nCount(0)	//最初から発射可能
 {
 	//---- モデル確保 ----
 	m_pModel = new Model;

@@ -29,8 +29,9 @@ public:
 public:
 	static Result Hit(Box a, Box b);
 	static Result Hit(Sphere a, Sphere b);
+	static Result Hit(Sphere a, Box b);
 private:
-
+	static float Clamp(float num, float min, float max);
 };
 
 #endif

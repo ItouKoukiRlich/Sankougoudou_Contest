@@ -8,8 +8,8 @@
 //==== 定数・マクロ定義 ====
 namespace nameTarretEnemy
 {
-	constexpr int	cg_nShotCountMax = 600;		//何フレーム置きに弾を発射するか
-	constexpr float cg_ShotLength = 30.0f;	//射程距離
+	constexpr int	cg_nShotCountMax = 180;		//何フレーム置きに弾を発射するか
+	constexpr float cg_ShotLength = 60.0f;	//射程距離
 }
 
 class TurretEnemy : public Enemy
