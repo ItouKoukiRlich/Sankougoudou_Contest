@@ -8,6 +8,9 @@
 #include"MessageWindow.h"
 #include"GameUI.h"
 #include"Enemy.h"
+#include"Mission.h"
+#include"GameOver.h"
+#include"Clear.h"
 
 //==== 定数・マクロ定義 ====
 namespace nameSceneGame
@@ -46,12 +49,30 @@ public:
 	void CreateEnemy(nmEnemyArray::Type type, DXf3 pos);
 
 private:
-	CameraGame*		m_pCamera;			//ゲームカメラ
-	Player*			m_pPlayer;			//プレイヤー
-	MessageWindow	m_MessageWindow;	//メッセージUI
-	GameUI			m_GameUI;			//ゲームのUI
-	Enemy*			m_pEnemy[nmEnemyArray::cg_MaxEnemy];	//敵
+	enum Phase
+	{
+		eGame,		//ゲーム
+		eGameOver,	//ゲームオーバー
+		eDelay,		//ゲームゲーム時の間
+		eClear,		//クリア
+	};
 
+private:
+	void Collision();
+	void StartGameOver(GameOver::Type type);
+	bool CheckOutField();
+
+private:
+	GameOver			m_GameOver;			//ゲームオーバー
+	CameraGame*			m_pCamera;			//ゲームカメラ
+	Player*				m_pPlayer;			//プレイヤー
+	MessageWindow		m_MessageWindow;	//メッセージUI
+	GameUI				m_GameUI;			//ゲームのUI
+	Enemy*				m_pEnemy[nmEnemyArray::cg_MaxEnemy];	//敵
+	Mission*			m_pMission;
+	Clear				m_Clear;			//クリア
+	SceneGame::Phase	m_phase;
+	int					m_nGameOverCount;	//ゲームオーバー以降の間をカウント
 };
 
 #endif

@@ -72,6 +72,9 @@ public:
 	/// <returns>F–³“G‚È‚çtrue</returns>
 	bool GetBarrier() const;
 
+	NormalBullet* GetNormalBullet();
+	SpeedBullet* GetSpeedBullet();
+
 private:
 	//ˆÚ“®•ûŒü‚Ì—ñ‹“Œ^
 	enum MoveDirection

@@ -7,6 +7,10 @@
 #include"Model.h"
 #include"Camera.h"
 #include"EnemyIcon.h"
+#include"EnemyHP.h"
+#include"Collision.h"
+#include"Geometory.h"
+#include"Function.h"
 
 class Enemy : public GameObject
 {
@@ -40,6 +44,18 @@ public:
 	/// <returns></returns>
 	Bullet* GetBullet() const;
 
+	/// <summary>
+	/// HPの減算
+	/// </summary>
+	/// <param name="damage">：引く値</param>
+	void MinusHP(int damage);
+
+	/// <summary>
+	/// 当たり判定を取得
+	/// </summary>
+	/// <returns></returns>
+	Collision::Sphere GetCollision() const;
+
 	static void SetCamera(Camera* pCamera);
 
 protected:
@@ -54,6 +70,8 @@ protected:
 	int			m_nBulletNum;	//弾の数
 	EnemyIcon	m_Icon;			//アイコン
 	bool		m_bMission;		//ミッション対象ならtrue
+	EnemyHP		m_HPui;			//HPの表示
+	Collision::Sphere m_Collision;
 };
 
 #endif

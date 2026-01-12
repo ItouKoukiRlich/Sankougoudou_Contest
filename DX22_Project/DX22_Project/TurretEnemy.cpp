@@ -3,6 +3,13 @@
 #include"Model.h"
 #include"NormalEnemyBullet.h"
 #include"Input.h"
+
+namespace nameTarretEnemy
+{
+	constexpr int cg_MaxHP = 4;
+	constexpr float cg_DrawHpPos = 4.0f;	//ˆÊ’u‚©‚ç‚Ç‚Ì‚­‚ç‚¢—£‚ê‚Ä‚¢‚é‚©
+	constexpr float cg_Size = 3.0f;
+}
 using namespace nameTarretEnemy;
 
 Player* TurretEnemy::m_pPlayer = nullptr;
@@ -12,7 +19,7 @@ TurretEnemy::TurretEnemy()
 {
 	//---- ƒ‚ƒfƒ‹Šm•Û ----
 	m_pModel = new Model;
-	if (!m_pModel->Load("Assets/Model/Enemy/Turret.fbx", 1.0f, Model::Flip::XFlip))
+	if (!m_pModel->Load("Assets/Model/Enemy/Turret.fbx", cg_Size, Model::Flip::XFlip))
 	{
 		MessageBox(NULL, "TurretEnemy_Model_error", "error", MB_OK);
 	}
@@ -20,6 +27,12 @@ TurretEnemy::TurretEnemy()
 	//---- ’e‚ðŠm•Û ----
 	m_pBullet		= new NEB;
 	m_nBulletNum	= 1;		//’e‚Ì”‚Í‚P
+	
+	//---- ƒ‰ƒCƒt ----
+	m_nLife = cg_MaxHP;
+
+	//---- “–‚½‚è”»’è ----
+	m_Collision.radius = (cg_Size + 2.0f) * 0.5f;
 }
 
 TurretEnemy::~TurretEnemy()
@@ -65,6 +78,10 @@ void TurretEnemy::Draw()
 	if (!m_bActive) return;
 	Enemy::Draw();
 	m_pBullet->Draw();
+	m_HPui.Draw(cg_MaxHP, m_nLife, {m_Pos.x, m_Pos.y + cg_DrawHpPos, m_Pos.z});
+
+	//float num = m_Collision.radius * 2.0f;
+	//CreateBox(m_Pos, { num, num, num }, { 0.0f, 0.0f, 0.0f });
 }
 
 void TurretEnemy::SetPlayer(Player* player)

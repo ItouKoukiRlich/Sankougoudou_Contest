@@ -13,7 +13,8 @@ Enemy::Enemy()
 	,m_nBulletNum(0)
 	,m_bMission(false)
 {
-
+	m_Collision.center = {};
+	m_Collision.radius = 0.5f;
 }
 
 Enemy::~Enemy()
@@ -79,6 +80,7 @@ void Enemy::CreateEnemy(DXf3 pos)
 	m_bActive	= true;
 	m_Pos		= pos;
 	m_Icon.SetPos({pos.x, pos.y + 1.0f, pos.z});
+	m_Collision.center = pos;
 }
 
 int Enemy::GetBulletNum() const
@@ -91,7 +93,23 @@ Bullet* Enemy::GetBullet() const
 	return m_pBullet;
 }
 
+void Enemy::MinusHP(int damage)
+{
+	m_nLife -= damage;
+	if (m_nLife <= 0)
+	{
+		m_nLife = 0;
+		m_bActive = false;
+		if (m_pBullet) m_pBullet->Stop();
+	}
+}
+
 void Enemy::SetCamera(Camera* pCamera)
 {
 	m_pCamera = pCamera;
+}
+
+Collision::Sphere Enemy::GetCollision() const
+{
+	return m_Collision;
 }

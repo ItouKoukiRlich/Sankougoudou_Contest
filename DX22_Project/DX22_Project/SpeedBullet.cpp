@@ -13,6 +13,7 @@ using namespace nameSpeedBullete;
 SpeedBullet::SpeedBullet()
 {
 	EFK_INS->Load(SpeedBulletEffect);
+	m_nDamage = 1;
 }
 
 SpeedBullet::~SpeedBullet()
@@ -30,6 +31,9 @@ void SpeedBullet::Update()
 
 	//弾の位置を決定
 	EFK_INS->SetPos(m_handle, m_Pos);
+
+	//当たり判定の位置も更新
+	m_Collision.center = m_Pos;
 
 	m_nActiveCount++;	//カウントを進める
 	if (m_nActiveCount > cg_FlameToDestroy)

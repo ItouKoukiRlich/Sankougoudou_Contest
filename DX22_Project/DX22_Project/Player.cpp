@@ -224,6 +224,16 @@ bool Player::GetBarrier() const
 	return m_bBarrier;
 }
 
+NormalBullet* Player::GetNormalBullet()
+{
+	return m_pBullet;
+}
+
+SpeedBullet* Player::GetSpeedBullet()
+{
+	return m_pSpeedBullet;
+}
+
 void Player::ChangeMode()
 {
 	float radY = m_pCamera->GetRadY();	//ƒJƒƒ‰‚Ìc‚ÌŠp“x‚ğ“üè

@@ -67,6 +67,12 @@
     <Filter Include="ソース ファイル\SceneGame\Player">
       <UniqueIdentifier>{934fb282-4ec9-4dd5-84c9-edb5f13b922b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\SceneGame\Mission">
+      <UniqueIdentifier>{9b325a8a-1764-4c7d-8a2f-b60903b11beb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\SceneGame\Mission">
+      <UniqueIdentifier>{aff79361-3a16-4565-bdd3-a5b3dc5f4f10}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sprite.cpp">
@@ -188,6 +194,24 @@
     </ClCompile>
     <ClCompile Include="SpeedBullet.cpp">
       <Filter>ソース ファイル\SceneGame\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyHP.cpp">
+      <Filter>ソース ファイル\SceneGame\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="MissionEffect.cpp">
+      <Filter>ソース ファイル\SceneGame\GameUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Mission.cpp">
+      <Filter>ソース ファイル\SceneGame\Mission</Filter>
+    </ClCompile>
+    <ClCompile Include="MissionTurret.cpp">
+      <Filter>ソース ファイル\SceneGame\Mission</Filter>
+    </ClCompile>
+    <ClCompile Include="GameOver.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Clear.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -311,11 +335,29 @@
     <ClInclude Include="NormalEnemyBullet.h">
       <Filter>ヘッダー ファイル\SceneGame\Bullet</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyIcon.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="SpeedBullet.h">
       <Filter>ヘッダー ファイル\SceneGame\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyHP.h">
+      <Filter>ヘッダー ファイル\SceneGame\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyIcon.h">
+      <Filter>ヘッダー ファイル\SceneGame\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="MissionEffect.h">
+      <Filter>ヘッダー ファイル\SceneGame\GameUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Mission.h">
+      <Filter>ヘッダー ファイル\SceneGame\Mission</Filter>
+    </ClInclude>
+    <ClInclude Include="MissionTurret.h">
+      <Filter>ヘッダー ファイル\SceneGame\Mission</Filter>
+    </ClInclude>
+    <ClInclude Include="GameOver.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Clear.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

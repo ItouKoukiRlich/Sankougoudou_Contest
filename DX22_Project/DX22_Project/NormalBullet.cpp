@@ -14,6 +14,7 @@ using namespace nameNormalBullete;
 NormalBullet::NormalBullet()
 {
 	EFK_INS->Load(NormalBulletEffect);
+	m_nDamage = 2;
 }
 
 NormalBullet::~NormalBullet()
@@ -31,6 +32,9 @@ void NormalBullet::Update()
 
 	//弾の位置を決定
 	EFK_INS->SetPos(m_handle, m_Pos);
+
+	//当たり判定の位置も更新
+	m_Collision.center = m_Pos;
 
 	m_nActiveCount++;	//カウントを進める
 	if (m_nActiveCount > cg_FlameToDestroy)
