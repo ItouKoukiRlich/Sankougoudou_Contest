@@ -31,6 +31,7 @@ private:
 	{
 		eTexStart,
 		eTexStartBack,
+		eTexClear,
 	};
 
 private:
@@ -42,6 +43,7 @@ private:
 private:
 	MissionEffect::Anime	m_Anime;
 	UI						m_ui;
+	UI						m_ClearUI;		//クリアのUI
 	int						m_AnimeCount;	//テクスチャアニメーションのカウント
 };
 

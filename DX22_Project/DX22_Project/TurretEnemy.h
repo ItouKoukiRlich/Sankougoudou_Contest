@@ -22,12 +22,20 @@ public:
 
 	static void SetPlayer(Player* player);
 
+	/// <summary>
+	/// ミッション対象のフラグを設定
+	/// </summary>
+	/// <param name="flag">：ミッション対象ならtrue</param>
+	static void SetMissionFlag(bool flag);
+
 private:
 	/// <summary>
 	/// 発射条件をみたしているか確認
 	/// </summary>
 	/// <returns>：発射条件を満たすならならtrue</returns>
 	bool CheckShot();
+
+	static bool m_bMission;
 
 private:
 	static Player* m_pPlayer;

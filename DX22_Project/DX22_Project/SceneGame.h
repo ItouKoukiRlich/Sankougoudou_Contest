@@ -24,13 +24,15 @@ namespace nmEnemyArray
 	enum Type
 	{
 		eTurret,
+		eNormal
 	};
 
 	//---- タレット型敵 ----
 	constexpr int cg_TurretStart	= 0;
 	constexpr int cg_MaxTurret		= 10;
-
-	constexpr int cg_MaxEnemy = cg_MaxTurret;
+	constexpr int cg_NormalStart	= 10;
+	constexpr int cg_MaxNormal		= 10;
+	constexpr int cg_MaxEnemy = cg_MaxTurret + cg_MaxNormal;
 }
 
 class SceneGame : public Scene
@@ -61,6 +63,11 @@ private:
 	void Collision();
 	void StartGameOver(GameOver::Type type);
 	bool CheckOutField();
+	/// <summary>
+	/// ミッション対象の敵のカウントを進める
+	/// </summary>
+	/// <param name="i"></param>
+	void EnemyMissionCount(int i);
 
 private:
 	GameOver			m_GameOver;			//ゲームオーバー
@@ -69,10 +76,11 @@ private:
 	MessageWindow		m_MessageWindow;	//メッセージUI
 	GameUI				m_GameUI;			//ゲームのUI
 	Enemy*				m_pEnemy[nmEnemyArray::cg_MaxEnemy];	//敵
-	Mission*			m_pMission;
+	Mission*			m_pMission[Mission::Type::eTypeMax];
 	Clear				m_Clear;			//クリア
-	SceneGame::Phase	m_phase;
+	SceneGame::Phase	m_phase;			//
 	int					m_nGameOverCount;	//ゲームオーバー以降の間をカウント
+	int					m_nGameCount;		//ゲームのカウント
 };
 
 #endif

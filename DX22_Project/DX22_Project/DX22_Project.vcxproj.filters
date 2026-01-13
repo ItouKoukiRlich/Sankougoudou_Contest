@@ -73,6 +73,12 @@
     <Filter Include="ヘッダー ファイル\SceneGame\Mission">
       <UniqueIdentifier>{aff79361-3a16-4565-bdd3-a5b3dc5f4f10}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\SceneGame\Enemy\STATUS_UI">
+      <UniqueIdentifier>{31c16b68-059a-4d26-901a-4fe93d808304}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\SceneGame\Enemy\STATUS_UI">
+      <UniqueIdentifier>{bede46bb-9443-463b-8824-01b427609af3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sprite.cpp">
@@ -153,9 +159,6 @@
     <ClCompile Include="MessageWindow.cpp">
       <Filter>ソース ファイル\SceneGame</Filter>
     </ClCompile>
-    <ClCompile Include="Collision.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="GameUI.cpp">
       <Filter>ソース ファイル\SceneGame\GameUI</Filter>
     </ClCompile>
@@ -186,17 +189,11 @@
     <ClCompile Include="Player_speed.cpp">
       <Filter>ソース ファイル\SceneGame\Player</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyIcon.cpp">
-      <Filter>ソース ファイル\SceneGame\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="Player_normal.cpp">
       <Filter>ソース ファイル\SceneGame\Player</Filter>
     </ClCompile>
     <ClCompile Include="SpeedBullet.cpp">
       <Filter>ソース ファイル\SceneGame\Bullet</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemyHP.cpp">
-      <Filter>ソース ファイル\SceneGame\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="MissionEffect.cpp">
       <Filter>ソース ファイル\SceneGame\GameUI</Filter>
@@ -207,11 +204,44 @@
     <ClCompile Include="MissionTurret.cpp">
       <Filter>ソース ファイル\SceneGame\Mission</Filter>
     </ClCompile>
-    <ClCompile Include="GameOver.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="MIssionNormal.cpp">
+      <Filter>ソース ファイル\SceneGame\Mission</Filter>
+    </ClCompile>
+    <ClCompile Include="MissionCreate.cpp">
+      <Filter>ソース ファイル\SceneGame\Mission</Filter>
+    </ClCompile>
+    <ClCompile Include="MissionMain.cpp">
+      <Filter>ソース ファイル\SceneGame\Mission</Filter>
+    </ClCompile>
+    <ClCompile Include="MIssionSuper.cpp">
+      <Filter>ソース ファイル\SceneGame\Mission</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyIcon.cpp">
+      <Filter>ソース ファイル\SceneGame\Enemy\STATUS_UI</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyHP.cpp">
+      <Filter>ソース ファイル\SceneGame\Enemy\STATUS_UI</Filter>
+    </ClCompile>
+    <ClCompile Include="NormalEnemy.cpp">
+      <Filter>ソース ファイル\SceneGame\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Clear.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\SceneGame</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision.cpp">
+      <Filter>ソース ファイル\SceneGame</Filter>
+    </ClCompile>
+    <ClCompile Include="GameOver.cpp">
+      <Filter>ソース ファイル\SceneGame</Filter>
+    </ClCompile>
+    <ClCompile Include="CreateEnemy.cpp">
+      <Filter>ソース ファイル\SceneGame\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="MainEnemy.cpp">
+      <Filter>ソース ファイル\SceneGame\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="SuperEnemy.cpp">
+      <Filter>ソース ファイル\SceneGame\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -308,9 +338,6 @@
     <ClInclude Include="TitleUI.h">
       <Filter>ヘッダー ファイル\SceneTitle</Filter>
     </ClInclude>
-    <ClInclude Include="Collision.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="GameUI.h">
       <Filter>ヘッダー ファイル\SceneGame\GameUI</Filter>
     </ClInclude>
@@ -338,12 +365,6 @@
     <ClInclude Include="SpeedBullet.h">
       <Filter>ヘッダー ファイル\SceneGame\Bullet</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyHP.h">
-      <Filter>ヘッダー ファイル\SceneGame\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyIcon.h">
-      <Filter>ヘッダー ファイル\SceneGame\Enemy</Filter>
-    </ClInclude>
     <ClInclude Include="MissionEffect.h">
       <Filter>ヘッダー ファイル\SceneGame\GameUI</Filter>
     </ClInclude>
@@ -353,11 +374,44 @@
     <ClInclude Include="MissionTurret.h">
       <Filter>ヘッダー ファイル\SceneGame\Mission</Filter>
     </ClInclude>
+    <ClInclude Include="MIssionNormal.h">
+      <Filter>ヘッダー ファイル\SceneGame\Mission</Filter>
+    </ClInclude>
+    <ClInclude Include="MissionCreate.h">
+      <Filter>ヘッダー ファイル\SceneGame\Mission</Filter>
+    </ClInclude>
+    <ClInclude Include="MissionMain.h">
+      <Filter>ヘッダー ファイル\SceneGame\Mission</Filter>
+    </ClInclude>
+    <ClInclude Include="MIssionSuper.h">
+      <Filter>ヘッダー ファイル\SceneGame\Mission</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>ヘッダー ファイル\SceneGame</Filter>
+    </ClInclude>
     <ClInclude Include="GameOver.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\SceneGame</Filter>
     </ClInclude>
     <ClInclude Include="Clear.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\SceneGame</Filter>
+    </ClInclude>
+    <ClInclude Include="NormalEnemy.h">
+      <Filter>ヘッダー ファイル\SceneGame\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyHP.h">
+      <Filter>ヘッダー ファイル\SceneGame\Enemy\STATUS_UI</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyIcon.h">
+      <Filter>ヘッダー ファイル\SceneGame\Enemy\STATUS_UI</Filter>
+    </ClInclude>
+    <ClInclude Include="MainEnemy.h">
+      <Filter>ヘッダー ファイル\SceneGame\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="SuperEnemy.h">
+      <Filter>ヘッダー ファイル\SceneGame\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="CreateEnemy.h">
+      <Filter>ヘッダー ファイル\SceneGame\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

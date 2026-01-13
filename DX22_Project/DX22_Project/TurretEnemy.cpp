@@ -8,10 +8,12 @@ namespace nameTarretEnemy
 {
 	constexpr int cg_MaxHP = 4;
 	constexpr float cg_DrawHpPos = 4.0f;	//ˆÊ’u‚©‚ç‚Ç‚Ì‚­‚ç‚¢—£‚ê‚Ä‚¢‚é‚©
+	constexpr float cg_DrawIconPos = 6.0f;	//ˆÊ’u‚©‚ç‚Ç‚Ì‚­‚ç‚¢—£‚ê‚Ä‚¢‚é‚©
 	constexpr float cg_Size = 3.0f;
 }
 using namespace nameTarretEnemy;
 
+bool TurretEnemy::m_bMission = false;
 Player* TurretEnemy::m_pPlayer = nullptr;
 
 TurretEnemy::TurretEnemy()
@@ -76,6 +78,11 @@ void TurretEnemy::Update()
 void TurretEnemy::Draw()
 {
 	if (!m_bActive) return;
+	if (m_bMission)
+	{
+		m_Icon.SetPos({ m_Pos.x, m_Pos.y + cg_DrawIconPos, m_Pos.z });
+		m_Icon.Draw();
+	}
 	Enemy::Draw();
 	m_pBullet->Draw();
 	m_HPui.Draw(cg_MaxHP, m_nLife, {m_Pos.x, m_Pos.y + cg_DrawHpPos, m_Pos.z});
@@ -87,6 +94,11 @@ void TurretEnemy::Draw()
 void TurretEnemy::SetPlayer(Player* player)
 {
 	m_pPlayer = player;
+}
+
+void TurretEnemy::SetMissionFlag(bool flag)
+{
+	m_bMission = flag;
 }
 
 bool TurretEnemy::CheckShot()

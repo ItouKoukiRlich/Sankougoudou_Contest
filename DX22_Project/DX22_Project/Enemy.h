@@ -33,6 +33,11 @@ public:
 	void CreateEnemy(DXf3 pos);
 
 	/// <summary>
+	/// ノーマルの敵を生成
+	/// </summary>
+	virtual void CreateEnemyNormal(DXf3 pos, int type, DXf3 move = { 5.0f, 5.0f, 5.0f });
+
+	/// <summary>
 	///	弾の数を入手
 	/// </summary>
 	/// <returns></returns>
@@ -48,7 +53,8 @@ public:
 	/// HPの減算
 	/// </summary>
 	/// <param name="damage">：引く値</param>
-	void MinusHP(int damage);
+	/// /// <returns>HPが0になればtrue</returns>
+	bool MinusHP(int damage);
 
 	/// <summary>
 	/// 当たり判定を取得
@@ -69,7 +75,6 @@ protected:
 	bool		m_bActive;		//フィールドに生成しているならtrue
 	int			m_nBulletNum;	//弾の数
 	EnemyIcon	m_Icon;			//アイコン
-	bool		m_bMission;		//ミッション対象ならtrue
 	EnemyHP		m_HPui;			//HPの表示
 	Collision::Sphere m_Collision;
 };

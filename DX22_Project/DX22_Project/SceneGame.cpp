@@ -11,16 +11,22 @@
 #include"Collision.h"
 #include"EnemyIcon.h"
 #include"EnemyHP.h"
+#include"MissionTurret.h"
+#include"MissionCreate.h"
+#include"MIssionNormal.h"
+#include"MIssionSuper.h"
+#include"MissionMain.h"
+#include"NormalEnemy.h"
 using namespace nameSceneGame;
 using namespace nmEnemyArray;
 
 SceneGame::SceneGame()
 	:m_pCamera(new CameraGame)
 	,m_pPlayer(new Player)
-	,m_pMission(new Mission)
 	,m_pEnemy()
 	,m_phase(SceneGame::Phase::eGame)
 	,m_nGameOverCount(0)
+	,m_nGameCount(0)
 {
 	RenderTarget* pRTV = GetDefaultRTV();	//レンダーターゲット
 	DepthStencil* pDSV = GetDefaultDSV();	//デプス
@@ -34,10 +40,25 @@ SceneGame::SceneGame()
 	m_pPlayer->SetCamera(m_pCamera);		//プレイヤーにカメラを設定
 	m_pCamera->SetPlayer(m_pPlayer);		//カメラ操作時に必要になるプレイヤーのアドレスを渡す
 	EFK_INS->SetCamera(m_pCamera);			//カメラをエフェクト管理クラスに設定
-
+	Mission::Load();
+	//---- 敵 ----
 	for (int i = 0; i < cg_MaxEnemy; i++)
 	{
-		if (i < cg_MaxTurret) m_pEnemy[i] = new TurretEnemy;
+		if		(i < cg_MaxTurret)				  m_pEnemy[i] = new TurretEnemy;
+		else if (i < cg_MaxNormal + cg_MaxTurret) m_pEnemy[i] = new NormalEnemy;
+	}
+
+	//---- ミッション ----
+	for (int i = 0; i < Mission::Type::eTypeMax; ++i)
+	{
+		switch (i)
+		{
+		case Mission::Type::eTurret: m_pMission[i] = new MissionTurret; break;
+		case Mission::Type::eCreate: m_pMission[i] = new MissionCreate; break;
+		case Mission::Type::eNormal: m_pMission[i] = new MIssionNormal; break;
+		case Mission::Type::eSuper:  m_pMission[i] = new MissionSuper;  break;
+		case Mission::Type::eMain:   m_pMission[i] = new MissionMain;   break;
+		}
 	}
 
 	//---- 諸々のインスタンス化が終わり次第Game中のUIを作成 ----
@@ -48,7 +69,11 @@ SceneGame::SceneGame()
 		m_GameUI.CreateWarningUI(*m_pPlayer);
 	}
 
-	CreateEnemy(nmEnemyArray::eTurret, { 0.0f, 0.0f, 10.0f });
+	//初期からいる敵を設置
+	CreateEnemy(nmEnemyArray::eNormal, {  0.0f, 0.0f, 10.0f });
+	//CreateEnemy(nmEnemyArray::eTurret, {  0.0f, 0.0f, 10.0f });
+	//CreateEnemy(nmEnemyArray::eTurret, { 25.0f, 0.0f, 30.0f });
+	//CreateEnemy(nmEnemyArray::eTurret, {-25.0f, 0.0f, 30.0f });
 }
 
 SceneGame::~SceneGame()
@@ -58,7 +83,8 @@ SceneGame::~SceneGame()
 		delete m_pEnemy[i];
 		m_pEnemy[i] = nullptr;
 	}
-	SAFEDELETE(m_pMission);
+	for (int i = 0; i < Mission::Type::eTypeMax; ++i)
+		SAFEDELETE(m_pMission[i]);
 	SAFEDELETE(m_pPlayer);
 	SAFEDELETE(m_pCamera);
 	EFK_INS->DeleteInstance();
@@ -78,8 +104,33 @@ void SceneGame::Update()
 				m_pEnemy[i]->Update();
 		}
 
+		//---- テクスチャメッセージ ----
+		if (m_nGameCount == 0)
+			m_MessageWindow.Start(MessageWindow::eMission1);
+		else if (m_nGameCount == 215)
+		{
+			m_GameUI.PlayMissionEffect(MissionEffect::eAnimeStart);
+			m_pMission[Mission::eTurret]->MissionStart();
+			TurretEnemy::SetMissionFlag(true);
+		}
+		m_nGameCount++;
+
 		//---- ゲーム内オブジェクトの更新処理が終わってから当たり判定を確認 ----
 		Collision();
+
+		//---- 当たり判定を確認後ミッションクリアか確認 ----
+		for (int i = 0; i < Mission::eTypeMax; ++i)
+		{
+			if (m_pMission[i]->CheckActive())
+			{
+				if (m_pMission[i]->CheckClear())
+				{
+					m_GameUI.PlayMissionEffect(MissionEffect::eAnimeClear);
+					m_pMission[i]->SetActive(false);
+				}
+			}
+		}
+
 		//---- 諸々の更新処理が終わってからUIに反映 ----
 		m_GameUI.Update();
 
@@ -139,10 +190,18 @@ void SceneGame::Draw()
 			m_pEnemy[i]->Draw();
 	}
 	Effect::GetInstance()->Draw();
-	m_pMission->Draw();
 
 	RenderTarget* pRTV = GetDefaultRTV();
 	DepthStencil* pDSV = GetDefaultDSV();
+
+	//==== ミッションの描画 ====
+	SetRenderTargets(1, &pRTV, nullptr);
+	Mission::MissionMenuDraw();
+	for (int i = 0; i < Mission::Type::eTypeMax; ++i)
+		m_pMission[i]->Draw();
+	Mission::CountRisset();
+	SetRenderTargets(1, &pRTV, pDSV);
+	
 	switch (m_phase)
 	{
 	case SceneGame::Phase::eGame:
@@ -174,11 +233,19 @@ void SceneGame::CreateEnemy(nmEnemyArray::Type type, DXf3 pos)
 	switch (type)
 	{
 	case nmEnemyArray::eTurret:
-		for (int i = cg_TurretStart; i < cg_MaxTurret; ++i)
-		{
+		for (int i = cg_TurretStart; i < cg_MaxTurret; ++i){
 			//ゲームで使用中ならスキップ
 			if (m_pEnemy[i]->CheckActive()) continue;
-			
+			//ゲームに設置
+			m_pEnemy[i]->CreateEnemy(pos);
+			break;
+		}
+		break;
+
+	case nmEnemyArray::eNormal:
+		for (int i = cg_NormalStart; i < cg_MaxNormal + cg_MaxTurret; ++i){
+			//ゲームで使用中ならスキップ
+			if (m_pEnemy[i]->CheckActive()) continue;
 			//ゲームに設置
 			m_pEnemy[i]->CreateEnemy(pos);
 			break;
@@ -250,7 +317,8 @@ void SceneGame::Collision()
 			if (!NormalBullet[nb].GetActive()) continue;	//発射してないなら処理しない
 			result = Collision::Hit(EnemyCollision, NormalBullet[nb].GetCollision());
 			if (result.isHit) {
-				m_pEnemy[i]->MinusHP(NormalBullet[nb].GetDamage());
+				if (m_pEnemy[i]->MinusHP(NormalBullet[nb].GetDamage()))
+					EnemyMissionCount(i);
 				NormalBullet[nb].Stop();
 			}
 		}
@@ -261,7 +329,8 @@ void SceneGame::Collision()
 			if (!SpeedBullet[sb].GetActive()) continue;	//発射してないなら処理しない
 			result = Collision::Hit(EnemyCollision, SpeedBullet[sb].GetCollision());
 			if (result.isHit) {
-				m_pEnemy[i]->MinusHP(SpeedBullet[sb].GetDamage());
+				if (m_pEnemy[i]->MinusHP(SpeedBullet[sb].GetDamage()))
+					EnemyMissionCount(i);
 				SpeedBullet[sb].Stop();
 			}
 		}
@@ -289,4 +358,14 @@ bool SceneGame::CheckOutField()
 		return true;
 	}
 	return false;
+}
+
+void SceneGame::EnemyMissionCount(int i)
+{
+	//倒した敵がタレット型なら
+	if (i < cg_MaxTurret)
+	{
+		if (m_pMission[Mission::eTurret]->CheckActive())
+			m_pMission[Mission::eTurret]->CountPlus();
+	}
 }

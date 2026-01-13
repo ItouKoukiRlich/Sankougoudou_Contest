@@ -4,7 +4,7 @@
 //==== インクルード部 ====
 #include"Mission.h"
 
-class MissionTurret : Mission
+class MissionTurret : public Mission
 {
 public:
 	MissionTurret();

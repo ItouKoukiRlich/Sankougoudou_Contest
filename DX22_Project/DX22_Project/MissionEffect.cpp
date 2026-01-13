@@ -9,6 +9,12 @@ namespace nameMissionEffect
 	constexpr float cg_DeltaMoveX	= (0.5f - cg_InitPos.x) / cg_InOutFlame;	//１フレームのX座標の変化量
 	constexpr float cg_SLowFlame	= 60.0f;									//何秒間ゆっくりになるか
 	constexpr float cg_SlowMove		= -0.003f;									//ゆっくり時の１フレーム変化量
+
+	//ミッションクリア演出
+	constexpr DXf2	cg_InitPosClear = { 0.5f, -0.5f };
+	constexpr float cg_ClearInFlame = (0.5f - -0.5f) / 30.0f;
+	constexpr DXf2  cg_ChangeNum	= { (0.1f - 0.001f) / 20.0f, (0.25f - 1.0f) / 20.0f };
+	constexpr float cg_Alpha		= 1.0f / 60.0f;
 }
 using namespace nameMissionEffect;
 
@@ -19,6 +25,10 @@ MissionEffect::MissionEffect()
 	m_ui.SetUI("Assets/Texture/Mission/Back.png", MissionEffect::eTexStartBack, cg_InitPos, 0.2f);
 	m_ui.SetUI("Assets/Texture/Mission/Mission.png", MissionEffect::eTexStart, cg_InitPos, 0.2f);
 	m_ui.ChangeScale(MissionEffect::eTexStartBack, 1.24f, 1.0f);
+
+	m_ClearUI.SetUI("Assets/Texture/Mission/Clear.png", MissionEffect::eTexClear, cg_InitPosClear, 0.5f);
+	m_ClearUI.ChangeScale(eTexClear, 0.001f, 1.0f);
+	//m_ClearUI.ChangeScale(eAnimeClear, 0.1f, 0.25f);
 }
 
 MissionEffect::~MissionEffect()
@@ -77,6 +87,26 @@ void MissionEffect::UpdateStart()
 
 void MissionEffect::UpdateClear()
 {
+	if (m_AnimeCount < 30)
+	{
+		m_ClearUI.AddPos(eTexClear, 0.0f, cg_ClearInFlame);
+	}
+	else if (m_AnimeCount < 30 + 20)
+	{
+		m_ClearUI.AddScale(eTexClear, cg_ChangeNum.x, cg_ChangeNum.y);
+	}
+	else if (m_AnimeCount < 30 + 20 + 60)
+	{
+		m_ClearUI.ChangeColor(eTexClear, 1.0f, 1.0f, 1.0f, 1.0f - cg_Alpha * (float)(m_AnimeCount - 50));
+	}
+	else
+	{
+		m_Anime = MissionEffect::Anime::eAnimeNone;	//アニメーション終了
+		m_ClearUI.ChangePos(eTexClear, cg_InitPosClear.x, cg_InitPosClear.y);
+		m_ClearUI.ChangeColor(eTexClear, 1.0f, 1.0f, 1.0f, 1.0f );
+		m_ClearUI.ChangeScale(eTexClear, 0.001f, 1.0f);
+	}
+	m_AnimeCount++;
 }
 
 void MissionEffect::DrawStart()
@@ -86,4 +116,5 @@ void MissionEffect::DrawStart()
 
 void MissionEffect::DrawClear()
 {
+	m_ClearUI.Draw();
 }

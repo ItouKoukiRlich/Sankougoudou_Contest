@@ -1,6 +1,7 @@
 //==== インクルード部 ====
 #include"Enemy.h"
 #include"ShaderList.h"
+#include"NormalEnemy.h"
 
 Camera* Enemy::m_pCamera = nullptr;
 
@@ -11,7 +12,6 @@ Enemy::Enemy()
 	,m_bActive(false)
 	,m_pModel(nullptr)
 	,m_nBulletNum(0)
-	,m_bMission(false)
 {
 	m_Collision.center = {};
 	m_Collision.radius = 0.5f;
@@ -67,7 +67,7 @@ void Enemy::Draw()
 		m_pModel->Draw(i);
 	}
 
-	if (m_bMission) m_Icon.Draw();
+	//if (m_bMission) m_Icon.Draw();
 }
 
 bool Enemy::CheckActive() const
@@ -79,7 +79,13 @@ void Enemy::CreateEnemy(DXf3 pos)
 {
 	m_bActive	= true;
 	m_Pos		= pos;
-	m_Icon.SetPos({pos.x, pos.y + 1.0f, pos.z});
+	m_Collision.center = pos;
+}
+
+void Enemy::CreateEnemyNormal(DXf3 pos, int type, DXf3 move)
+{
+	m_bActive = true;
+	m_Pos = pos;
 	m_Collision.center = pos;
 }
 
@@ -93,7 +99,7 @@ Bullet* Enemy::GetBullet() const
 	return m_pBullet;
 }
 
-void Enemy::MinusHP(int damage)
+bool Enemy::MinusHP(int damage)
 {
 	m_nLife -= damage;
 	if (m_nLife <= 0)
@@ -101,7 +107,10 @@ void Enemy::MinusHP(int damage)
 		m_nLife = 0;
 		m_bActive = false;
 		if (m_pBullet) m_pBullet->Stop();
+		return true;
 	}
+
+	return false;
 }
 
 void Enemy::SetCamera(Camera* pCamera)
