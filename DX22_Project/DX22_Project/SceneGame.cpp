@@ -33,6 +33,7 @@ SceneGame::SceneGame()
 	SetRenderTargets(1, &pRTV, pDSV);		//レンダーターゲットを設定
 	SetDepthTest(true);						//奥行を認知
 	Enemy::SetCamera(m_pCamera);
+	Enemy::SetPlayer(m_pPlayer);
 	TurretEnemy::SetPlayer(m_pPlayer);
 	EnemyIcon::SetCamera(m_pCamera);
 	EnemyHP::SetCamera(m_pCamera);
@@ -71,9 +72,15 @@ SceneGame::SceneGame()
 
 	//初期からいる敵を設置
 	CreateEnemy(nmEnemyArray::eNormal, {  0.0f, 0.0f, 10.0f });
+	CreateNormalEnemy({ 20.0f, 0.0f, 20.0f },	NormalEnemy::e12);
+	CreateNormalEnemy({ -20.0f, 0.0f, 20.0f },	NormalEnemy::e21);
+	CreateNormalEnemy({ 20.0f, 0.0f, -20.0f },	NormalEnemy::e12tate);
+	CreateNormalEnemy({ -20.0f, 0.0f, -20.0f }, NormalEnemy::e21tate);
 	//CreateEnemy(nmEnemyArray::eTurret, {  0.0f, 0.0f, 10.0f });
 	//CreateEnemy(nmEnemyArray::eTurret, { 25.0f, 0.0f, 30.0f });
 	//CreateEnemy(nmEnemyArray::eTurret, {-25.0f, 0.0f, 30.0f });
+	m_pMission[Mission::eNormal]->MissionStart();
+	NormalEnemy::SetMissionFlag(true);
 }
 
 SceneGame::~SceneGame()
@@ -92,6 +99,15 @@ SceneGame::~SceneGame()
 
 void SceneGame::Update()
 {
+	if (IsKeyTrigger('B'))
+	{
+		CreateEnemy(nmEnemyArray::eNormal, { 0.0f, 0.0f, 10.0f });
+		CreateNormalEnemy({ 20.0f, 0.0f, -20.0f }, NormalEnemy::e12);
+		CreateNormalEnemy({ -20.0f, 0.0f, -20.0f }, NormalEnemy::e21);
+		CreateNormalEnemy({ 20.0f, 0.0f, 20.0f }, NormalEnemy::e12tate);
+		CreateNormalEnemy({ -20.0f, 0.0f, 20.0f }, NormalEnemy::e21tate);
+	}
+
 	switch (m_phase)
 	{
 	case SceneGame::Phase::eGame:
@@ -104,16 +120,16 @@ void SceneGame::Update()
 				m_pEnemy[i]->Update();
 		}
 
-		//---- テクスチャメッセージ ----
-		if (m_nGameCount == 0)
-			m_MessageWindow.Start(MessageWindow::eMission1);
-		else if (m_nGameCount == 215)
-		{
-			m_GameUI.PlayMissionEffect(MissionEffect::eAnimeStart);
-			m_pMission[Mission::eTurret]->MissionStart();
-			TurretEnemy::SetMissionFlag(true);
-		}
-		m_nGameCount++;
+		////---- テクスチャメッセージ ----
+		//if (m_nGameCount == 0)
+		//	m_MessageWindow.Start(MessageWindow::eMission1);
+		//else if (m_nGameCount == 215)
+		//{
+		//	m_GameUI.PlayMissionEffect(MissionEffect::eAnimeStart);
+		//	m_pMission[Mission::eTurret]->MissionStart();
+		//	TurretEnemy::SetMissionFlag(true);
+		//}
+		//m_nGameCount++;
 
 		//---- ゲーム内オブジェクトの更新処理が終わってから当たり判定を確認 ----
 		Collision();
@@ -254,6 +270,16 @@ void SceneGame::CreateEnemy(nmEnemyArray::Type type, DXf3 pos)
 	}
 }
 
+void SceneGame::CreateNormalEnemy(DXf3 pos, int type, DXf3 move)
+{
+	for (int i = cg_NormalStart; i < cg_MaxNormal + cg_MaxTurret; ++i) {
+		if (m_pEnemy[i]->CheckActive()) continue;
+		//ゲームに設置
+		m_pEnemy[i]->CreateEnemyNormal(pos, type, move);
+		break;
+	}
+}
+
 void SceneGame::Collision()
 {
 	Collision::Sphere PlayerCollision = m_pPlayer->GetCollision();	//プレイヤーの当たり判定持ってくる
@@ -367,5 +393,11 @@ void SceneGame::EnemyMissionCount(int i)
 	{
 		if (m_pMission[Mission::eTurret]->CheckActive())
 			m_pMission[Mission::eTurret]->CountPlus();
+	}
+	//倒した敵が小型タイプなら
+	else if (i < cg_MaxTurret + cg_MaxNormal)
+	{
+		if (m_pMission[Mission::eNormal]->CheckActive())
+			m_pMission[Mission::eNormal]->CountPlus();
 	}
 }

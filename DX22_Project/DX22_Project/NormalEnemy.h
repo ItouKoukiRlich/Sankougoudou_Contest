@@ -20,6 +20,7 @@ public:
 	~NormalEnemy() override;
 	void Update() override;
 	void Draw() override;
+	void CreateEnemyNormal(DXf3 pos, int type, DXf3 move = { 5.0f, 5.0f, 5.0f }) override;
 
 	/// <summary>
 	/// ミッション対象のフラグを設定
@@ -27,15 +28,28 @@ public:
 	/// <param name="flag">：ミッション対象ならtrue</param>
 	static void SetMissionFlag(bool flag);
 
-	void CreateEnemyNormal(DXf3 pos, int type, DXf3 move = { 5.0f, 5.0f, 5.0f }) override;
+private:
+	/// <summary>
+	/// 移動処理
+	/// </summary>
+	void MoveProcess();
+
+	/// <summary>
+	/// 攻撃処理
+	/// </summary>
+	void AttackProcess();
 
 private:
+	static Model* m_pModel;
 	static bool m_bMission;
-	DXf3		m_CenterPos;
-	DXf3		m_Move;
-	float		m_Degree;
-	float		m_Degree2;
+
+private:
+	DXf3			m_CenterPos;
+	DXf3			m_Move;
+	float			m_Degree;
+	float			m_Degree2;
 	NormalEnemyType m_neType;
+	int				m_nCount;
 };
 
 #endif

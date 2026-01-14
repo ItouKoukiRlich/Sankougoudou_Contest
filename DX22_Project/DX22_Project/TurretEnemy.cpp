@@ -13,17 +13,20 @@ namespace nameTarretEnemy
 }
 using namespace nameTarretEnemy;
 
-bool TurretEnemy::m_bMission = false;
-Player* TurretEnemy::m_pPlayer = nullptr;
+bool	TurretEnemy::m_bMission = false;
+Model*	TurretEnemy::m_pModel	= nullptr;
 
 TurretEnemy::TurretEnemy()
 	:m_nCount(0)	//Å‰‚©‚ç”­ŽË‰Â”\
 {
 	//---- ƒ‚ƒfƒ‹Šm•Û ----
-	m_pModel = new Model;
-	if (!m_pModel->Load("Assets/Model/Enemy/Turret.fbx", cg_Size, Model::Flip::XFlip))
+	if (!m_pModel)
 	{
-		MessageBox(NULL, "TurretEnemy_Model_error", "error", MB_OK);
+		m_pModel = new Model;
+		if (!m_pModel->Load("Assets/Model/Enemy/Turret.fbx", cg_Size, Model::Flip::XFlip))
+		{
+			MessageBox(NULL, "TurretEnemy_Model_error", "error", MB_OK);
+		}
 	}
 
 	//---- ’e‚ðŠm•Û ----
@@ -31,7 +34,7 @@ TurretEnemy::TurretEnemy()
 	m_nBulletNum	= 1;		//’e‚Ì”‚Í‚P
 	
 	//---- ƒ‰ƒCƒt ----
-	m_nLife = cg_MaxHP;
+	m_nLife = m_nMaxLife = cg_MaxHP;
 
 	//---- “–‚½‚è”»’è ----
 	m_Collision.radius = (cg_Size + 2.0f) * 0.5f;
@@ -83,17 +86,12 @@ void TurretEnemy::Draw()
 		m_Icon.SetPos({ m_Pos.x, m_Pos.y + cg_DrawIconPos, m_Pos.z });
 		m_Icon.Draw();
 	}
-	Enemy::Draw();
+	ModelDraw(m_pModel);
 	m_pBullet->Draw();
 	m_HPui.Draw(cg_MaxHP, m_nLife, {m_Pos.x, m_Pos.y + cg_DrawHpPos, m_Pos.z});
 
 	//float num = m_Collision.radius * 2.0f;
 	//CreateBox(m_Pos, { num, num, num }, { 0.0f, 0.0f, 0.0f });
-}
-
-void TurretEnemy::SetPlayer(Player* player)
-{
-	m_pPlayer = player;
 }
 
 void TurretEnemy::SetMissionFlag(bool flag)

@@ -50,6 +50,14 @@ public:
 	/// <param name="pos">：生成する位置</param>
 	void CreateEnemy(nmEnemyArray::Type type, DXf3 pos);
 
+	/// <summary>
+	/// ノーマルタイプの敵を作成
+	/// </summary>
+	/// <param name="pos">：位置</param>
+	/// <param name="type">：タイプ</param>
+	/// <param name="move">：移動量</param>
+	void CreateNormalEnemy(DXf3 pos, int type, DXf3 move = { 5.0f, 5.0f, 5.0f });
+
 private:
 	enum Phase
 	{

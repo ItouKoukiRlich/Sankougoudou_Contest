@@ -11,6 +11,7 @@
 #include"Collision.h"
 #include"Geometory.h"
 #include"Function.h"
+class Player;
 
 class Enemy : public GameObject
 {
@@ -19,6 +20,8 @@ public:
 	virtual~Enemy();
 	virtual void Update() = 0;
 	virtual void Draw();
+
+	void ModelDraw(Model* pModel);
 
 	/// <summary>
 	/// フィールドに存在しているか確認
@@ -63,15 +66,17 @@ public:
 	Collision::Sphere GetCollision() const;
 
 	static void SetCamera(Camera* pCamera);
+	static void SetPlayer(Player* pPlayer);
 
 protected:
 	static Camera* m_pCamera;
+	static Player* m_pPlayer;
 
 protected:
+	int			m_nMaxLife;		//最大HP
 	int			m_nLife;		//HP
 	DXf3		m_Angle;		//回転の角度
 	Bullet*		m_pBullet;		//弾
-	Model*		m_pModel;		//モデル
 	bool		m_bActive;		//フィールドに生成しているならtrue
 	int			m_nBulletNum;	//弾の数
 	EnemyIcon	m_Icon;			//アイコン

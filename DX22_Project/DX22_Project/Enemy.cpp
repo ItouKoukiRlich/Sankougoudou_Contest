@@ -2,15 +2,16 @@
 #include"Enemy.h"
 #include"ShaderList.h"
 #include"NormalEnemy.h"
+#include"Player.h"
 
 Camera* Enemy::m_pCamera = nullptr;
+Player* Enemy::m_pPlayer = nullptr;
 
 Enemy::Enemy()
 	:m_nLife(0)
 	,m_Angle({0.0f, 0.0f, 0.0f})
 	,m_pBullet(nullptr)
 	,m_bActive(false)
-	,m_pModel(nullptr)
 	,m_nBulletNum(0)
 {
 	m_Collision.center = {};
@@ -28,6 +29,11 @@ void Enemy::Update()
 }
 
 void Enemy::Draw()
+{
+	
+}
+
+void Enemy::ModelDraw(Model* pModel)
 {
 	//==== 頂点シェーダーに渡す変換行列の変数を宣言 ====
 	DirectX::XMFLOAT4X4 fWVP[3] = {};
@@ -48,26 +54,24 @@ void Enemy::Draw()
 	ShaderList::SetWVP(fWVP);
 
 	//モデルに使用する頂点シェーダー、ピクセルシェーダーを設定
-	m_pModel->SetVertexShader(ShaderList::GetVS(ShaderList::VS_WORLD));
-	m_pModel->SetPixelShader(ShaderList::GetPS(ShaderList::PS_UNLIT));
+	pModel->SetVertexShader(ShaderList::GetVS(ShaderList::VS_WORLD));
+	pModel->SetPixelShader(ShaderList::GetPS(ShaderList::PS_UNLIT));
 
 	// マテリアル別にメッシュを表示 
-	for (unsigned int i = 0; i < m_pModel->GetMeshNum(); ++i)
+	for (unsigned int i = 0; i < pModel->GetMeshNum(); ++i)
 	{
 		// モデルのメッシュを取得 
-		const Model::Mesh mesh = *m_pModel->GetMesh(i);
+		const Model::Mesh mesh = *pModel->GetMesh(i);
 
 		// メッシュに割り当てられているマテリアルを取得 
-		Model::Material material = *m_pModel->GetMaterial(mesh.materialID);
+		Model::Material material = *pModel->GetMaterial(mesh.materialID);
 
 		// シェーダーへマテリアルを設定 
 		ShaderList::SetMaterial(material);
 
 		// モデルの描画 
-		m_pModel->Draw(i);
+		pModel->Draw(i);
 	}
-
-	//if (m_bMission) m_Icon.Draw();
 }
 
 bool Enemy::CheckActive() const
@@ -87,6 +91,7 @@ void Enemy::CreateEnemyNormal(DXf3 pos, int type, DXf3 move)
 	m_bActive = true;
 	m_Pos = pos;
 	m_Collision.center = pos;
+	m_nLife = m_nMaxLife;
 }
 
 int Enemy::GetBulletNum() const
@@ -121,4 +126,9 @@ void Enemy::SetCamera(Camera* pCamera)
 Collision::Sphere Enemy::GetCollision() const
 {
 	return m_Collision;
+}
+
+void Enemy::SetPlayer(Player* pPlayer)
+{
+	m_pPlayer = pPlayer;
 }

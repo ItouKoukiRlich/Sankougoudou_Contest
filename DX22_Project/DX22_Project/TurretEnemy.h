@@ -20,8 +20,6 @@ public:
 	void Update() override;
 	void Draw() override;
 
-	static void SetPlayer(Player* player);
-
 	/// <summary>
 	/// ミッション対象のフラグを設定
 	/// </summary>
@@ -35,10 +33,9 @@ private:
 	/// <returns>：発射条件を満たすならならtrue</returns>
 	bool CheckShot();
 
-	static bool m_bMission;
-
 private:
-	static Player* m_pPlayer;
+	static bool		m_bMission;
+	static Model*	m_pModel;
 
 private:
 	unsigned int m_nCount;	//カウント
