@@ -13,6 +13,7 @@ Enemy::Enemy()
 	,m_pBullet(nullptr)
 	,m_bActive(false)
 	,m_nBulletNum(0)
+	,m_nMaxLife(4)
 {
 	m_Collision.center = {};
 	m_Collision.radius = 0.5f;
@@ -84,6 +85,7 @@ void Enemy::CreateEnemy(DXf3 pos)
 	m_bActive	= true;
 	m_Pos		= pos;
 	m_Collision.center = pos;
+	m_nLife = m_nMaxLife;
 }
 
 void Enemy::CreateEnemyNormal(DXf3 pos, int type, DXf3 move)

@@ -17,6 +17,9 @@
 #include"MIssionSuper.h"
 #include"MissionMain.h"
 #include"NormalEnemy.h"
+#include"CreateEnemy.h"
+#include"SuperEnemy.h"
+#include"MainEnemy.h"
 using namespace nameSceneGame;
 using namespace nmEnemyArray;
 
@@ -71,16 +74,19 @@ SceneGame::SceneGame()
 	}
 
 	//初期からいる敵を設置
-	CreateEnemy(nmEnemyArray::eNormal, {  0.0f, 0.0f, 10.0f });
-	CreateNormalEnemy({ 20.0f, 0.0f, 20.0f },	NormalEnemy::e12);
-	CreateNormalEnemy({ -20.0f, 0.0f, 20.0f },	NormalEnemy::e21);
-	CreateNormalEnemy({ 20.0f, 0.0f, -20.0f },	NormalEnemy::e12tate);
-	CreateNormalEnemy({ -20.0f, 0.0f, -20.0f }, NormalEnemy::e21tate);
+	CreateEnemy(nmEnemyArray::eTurret, {  0.0f, 0.0f, 10.0f });
+	CreateEnemy(nmEnemyArray::eTurret, {  0.0f, 0.0f, -10.0f });
+	CreateEnemy(nmEnemyArray::eTurret, {  10.0f, 0.0f, 0.0f });
+	CreateEnemy(nmEnemyArray::eTurret, {  -10.0f, 0.0f, 0.0f });
+	//CreateNormalEnemy({ 20.0f, 0.0f, 20.0f },	NormalEnemy::e12);
+	//CreateNormalEnemy({ -20.0f, 0.0f, 20.0f },	NormalEnemy::e21);
+	//CreateNormalEnemy({ 20.0f, 0.0f, -20.0f },	NormalEnemy::e12tate);
+	//CreateNormalEnemy({ -20.0f, 0.0f, -20.0f }, NormalEnemy::e21tate);
 	//CreateEnemy(nmEnemyArray::eTurret, {  0.0f, 0.0f, 10.0f });
 	//CreateEnemy(nmEnemyArray::eTurret, { 25.0f, 0.0f, 30.0f });
 	//CreateEnemy(nmEnemyArray::eTurret, {-25.0f, 0.0f, 30.0f });
-	m_pMission[Mission::eNormal]->MissionStart();
-	NormalEnemy::SetMissionFlag(true);
+	m_pMission[Mission::eTurret]->MissionStart();
+	TurretEnemy::SetMissionFlag(true);
 }
 
 SceneGame::~SceneGame()
@@ -141,8 +147,19 @@ void SceneGame::Update()
 			{
 				if (m_pMission[i]->CheckClear())
 				{
+					//ミッションを終了しクリアアニメーションを再生
 					m_GameUI.PlayMissionEffect(MissionEffect::eAnimeClear);
 					m_pMission[i]->SetActive(false);
+
+					//敵のアイコン表示も終了
+					switch (i)
+					{
+					case Mission::eTurret:  TurretEnemy::SetMissionFlag(false);
+					case Mission::eCreate:  CreateEnemy::SetMissionFlag(false);
+					case Mission::eNormal:  NormalEnemy::SetMissionFlag(false);
+					case Mission::eSuper:   SuperEnemy::SetMissionFlag(false);
+					case Mission::eMain:    MainEnemy::SetMissionFlag(false);
+					}
 				}
 			}
 		}

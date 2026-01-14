@@ -32,3 +32,8 @@ void MainEnemy::Draw()
 {
 
 }
+
+void MainEnemy::SetMissionFlag(bool flag)
+{
+	m_bMission = flag;
+}

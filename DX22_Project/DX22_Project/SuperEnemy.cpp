@@ -28,3 +28,8 @@ void SuperEnemy::Update()
 void SuperEnemy::Draw()
 {
 }
+
+void SuperEnemy::SetMissionFlag(bool flag)
+{
+	m_bMission = flag;
+}
