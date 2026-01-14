@@ -24,15 +24,28 @@ namespace nmEnemyArray
 	enum Type
 	{
 		eTurret,
-		eNormal
+		eCreate,
+		eNormal,
+		eSuper,
+		eMain
 	};
 
 	//---- タレット型敵 ----
 	constexpr int cg_TurretStart	= 0;
 	constexpr int cg_MaxTurret		= 10;
+	//---- ノーマルタイプ ----
 	constexpr int cg_NormalStart	= 10;
 	constexpr int cg_MaxNormal		= 10;
-	constexpr int cg_MaxEnemy = cg_MaxTurret + cg_MaxNormal;
+	//---- スーパータイプ ----
+	constexpr int cg_SuperStart		= 20;
+	constexpr int cg_MaxSuper		= 10;
+	//---- 作成タイプ ----
+	constexpr int cg_CreateStart	= 30;
+	constexpr int cg_MaxCreate		= 5;
+	//---- メインタイプ----
+	constexpr int cg_MainStart		= 35;
+	constexpr int cg_MaxMain		= 3;
+	constexpr int cg_MaxEnemy = cg_MaxTurret + cg_MaxNormal + cg_MaxSuper + cg_MaxCreate + cg_MaxMain;
 }
 
 class SceneGame : public Scene
@@ -48,7 +61,7 @@ public:
 	/// </summary>
 	/// <param name="type">：作成する敵の種類</param>
 	/// <param name="pos">：生成する位置</param>
-	void CreateEnemy(nmEnemyArray::Type type, DXf3 pos);
+	void CreateEnemyField(nmEnemyArray::Type type, DXf3 pos);
 
 	/// <summary>
 	/// ノーマルタイプの敵を作成

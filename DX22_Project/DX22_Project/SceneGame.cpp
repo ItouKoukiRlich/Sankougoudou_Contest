@@ -48,8 +48,11 @@ SceneGame::SceneGame()
 	//---- 敵 ----
 	for (int i = 0; i < cg_MaxEnemy; i++)
 	{
-		if		(i < cg_MaxTurret)				  m_pEnemy[i] = new TurretEnemy;
+		if (i < cg_MaxTurret)				  m_pEnemy[i] = new TurretEnemy;
 		else if (i < cg_MaxNormal + cg_MaxTurret) m_pEnemy[i] = new NormalEnemy;
+		else if (i < cg_MaxSuper + cg_MaxTurret + cg_MaxNormal) m_pEnemy[i] = new SuperEnemy;
+		else if (i < cg_MaxTurret + cg_MaxNormal + cg_MaxSuper + cg_MaxCreate) m_pEnemy[i] = new CreateEnemy;
+		else if (i < cg_MaxTurret + cg_MaxNormal + cg_MaxSuper + cg_MaxCreate + cg_MaxMain) m_pEnemy[i] = new MainEnemy;
 	}
 
 	//---- ミッション ----
@@ -74,10 +77,11 @@ SceneGame::SceneGame()
 	}
 
 	//初期からいる敵を設置
-	CreateEnemy(nmEnemyArray::eTurret, {  0.0f, 0.0f, 10.0f });
-	CreateEnemy(nmEnemyArray::eTurret, {  0.0f, 0.0f, -10.0f });
-	CreateEnemy(nmEnemyArray::eTurret, {  10.0f, 0.0f, 0.0f });
-	CreateEnemy(nmEnemyArray::eTurret, {  -10.0f, 0.0f, 0.0f });
+	CreateEnemyField(nmEnemyArray::eCreate, { 0.0f, 0.0f, 10.0f });
+	//CreateEnemy(nmEnemyArray::eTurret, {  0.0f, 0.0f, 10.0f });
+	//CreateEnemy(nmEnemyArray::eTurret, {  0.0f, 0.0f, -10.0f });
+	//CreateEnemy(nmEnemyArray::eTurret, {  10.0f, 0.0f, 0.0f });
+	//CreateEnemy(nmEnemyArray::eTurret, {  -10.0f, 0.0f, 0.0f });
 	//CreateNormalEnemy({ 20.0f, 0.0f, 20.0f },	NormalEnemy::e12);
 	//CreateNormalEnemy({ -20.0f, 0.0f, 20.0f },	NormalEnemy::e21);
 	//CreateNormalEnemy({ 20.0f, 0.0f, -20.0f },	NormalEnemy::e12tate);
@@ -85,8 +89,8 @@ SceneGame::SceneGame()
 	//CreateEnemy(nmEnemyArray::eTurret, {  0.0f, 0.0f, 10.0f });
 	//CreateEnemy(nmEnemyArray::eTurret, { 25.0f, 0.0f, 30.0f });
 	//CreateEnemy(nmEnemyArray::eTurret, {-25.0f, 0.0f, 30.0f });
-	m_pMission[Mission::eTurret]->MissionStart();
-	TurretEnemy::SetMissionFlag(true);
+	m_pMission[Mission::eCreate]->MissionStart();
+	CreateEnemy::SetMissionFlag(true);
 }
 
 SceneGame::~SceneGame()
@@ -107,11 +111,8 @@ void SceneGame::Update()
 {
 	if (IsKeyTrigger('B'))
 	{
-		CreateEnemy(nmEnemyArray::eNormal, { 0.0f, 0.0f, 10.0f });
-		CreateNormalEnemy({ 20.0f, 0.0f, -20.0f }, NormalEnemy::e12);
-		CreateNormalEnemy({ -20.0f, 0.0f, -20.0f }, NormalEnemy::e21);
-		CreateNormalEnemy({ 20.0f, 0.0f, 20.0f }, NormalEnemy::e12tate);
-		CreateNormalEnemy({ -20.0f, 0.0f, 20.0f }, NormalEnemy::e21tate);
+		CreateEnemyField(nmEnemyArray::eSuper, { 30.0f, 0.0f, 50.0f });
+		CreateEnemyField(nmEnemyArray::eSuper, { -30.0f, 0.0f, 50.0f });
 	}
 
 	switch (m_phase)
@@ -261,7 +262,7 @@ void SceneGame::Draw()
 	}
 }
 
-void SceneGame::CreateEnemy(nmEnemyArray::Type type, DXf3 pos)
+void SceneGame::CreateEnemyField(nmEnemyArray::Type type, DXf3 pos)
 {
 	switch (type)
 	{
@@ -277,6 +278,36 @@ void SceneGame::CreateEnemy(nmEnemyArray::Type type, DXf3 pos)
 
 	case nmEnemyArray::eNormal:
 		for (int i = cg_NormalStart; i < cg_MaxNormal + cg_MaxTurret; ++i){
+			//ゲームで使用中ならスキップ
+			if (m_pEnemy[i]->CheckActive()) continue;
+			//ゲームに設置
+			m_pEnemy[i]->CreateEnemy(pos);
+			break;
+		}
+		break;
+
+	case nmEnemyArray::eSuper:
+		for (int i = cg_SuperStart; i < cg_MaxNormal + cg_MaxTurret + cg_MaxSuper; ++i) {
+			//ゲームで使用中ならスキップ
+			if (m_pEnemy[i]->CheckActive()) continue;
+			//ゲームに設置
+			m_pEnemy[i]->CreateEnemy(pos);
+			break;
+		}
+		break;
+
+	case nmEnemyArray::eCreate:
+		for (int i = cg_CreateStart; i < cg_MaxNormal + cg_MaxTurret + cg_MaxSuper + cg_MaxCreate; ++i) {
+			//ゲームで使用中ならスキップ
+			if (m_pEnemy[i]->CheckActive()) continue;
+			//ゲームに設置
+			m_pEnemy[i]->CreateEnemy(pos);
+			break;
+		}
+		break;
+
+	case nmEnemyArray::eMain:
+		for (int i = cg_MainStart; i < cg_MaxNormal + cg_MaxTurret + cg_MaxSuper + cg_MaxCreate + cg_MaxMain; ++i) {
 			//ゲームで使用中ならスキップ
 			if (m_pEnemy[i]->CheckActive()) continue;
 			//ゲームに設置
@@ -349,11 +380,34 @@ void SceneGame::Collision()
 			}
 		}
 
+		//_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+		//    敵とプレイヤーの当たり判定    //
+		//_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+		Collision::Sphere EnemyCollision = m_pEnemy[i]->GetCollision();	//敵の当たり判定を入手
+		//倒した敵がタレット型なら
+		if (i < cg_MaxTurret)
+		{
+			
+		}
+		//倒した敵が小型タイプなら
+		else if (i < cg_MaxTurret + cg_MaxNormal)
+		{
+			
+		}
+		else if (i < cg_MaxTurret + cg_MaxNormal + cg_MaxSuper)
+		{
+			result = Collision::Hit(PlayerCollision, EnemyCollision);
+			if (result.isHit)
+			{
+				m_pEnemy[i]->Delete();	//敵を消す
+				EnemyMissionCount(i);	//ミッションのカウントを進める
+				m_pPlayer->MinusHP(nameEnemy::HitDamage);	//HPを削る
+			}
+		}
+
 		//_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 		//    プレイヤーの弾と敵の当たり判定    //
 		//_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
-		Collision::Sphere EnemyCollision = m_pEnemy[i]->GetCollision();	//敵の当たり判定を入手
-
 		//通常弾と比べる
 		for (int nb = 0; nb < namePlayer::cg_MaxNormalBullet; ++nb)
 		{
@@ -416,5 +470,23 @@ void SceneGame::EnemyMissionCount(int i)
 	{
 		if (m_pMission[Mission::eNormal]->CheckActive())
 			m_pMission[Mission::eNormal]->CountPlus();
+	}
+	//倒した敵がスーパータイプなら
+	else if (i < cg_MaxTurret + cg_MaxNormal + cg_MaxSuper)
+	{
+		if (m_pMission[Mission::eSuper]->CheckActive())
+			m_pMission[Mission::eSuper]->CountPlus();
+	}
+	//倒した敵が作成タイプなら
+	else if (i < cg_MaxTurret + cg_MaxNormal + cg_MaxSuper + cg_MaxCreate)
+	{
+		if (m_pMission[Mission::eCreate]->CheckActive())
+			m_pMission[Mission::eCreate]->CountPlus();
+	}
+	//倒した敵がメインタイプなら
+	else if (i < cg_MaxTurret + cg_MaxNormal + cg_MaxSuper + cg_MaxCreate + cg_MaxMain)
+	{
+		if (m_pMission[Mission::eMain]->CheckActive())
+			m_pMission[Mission::eMain]->CountPlus();
 	}
 }

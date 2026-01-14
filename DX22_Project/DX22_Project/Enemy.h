@@ -13,6 +13,11 @@
 #include"Function.h"
 class Player;
 
+namespace nameEnemy
+{
+	constexpr int HitDamage = 30;	//当たった際のダメージ
+}
+
 class Enemy : public GameObject
 {
 public:
@@ -33,12 +38,17 @@ public:
 	/// 敵を生成
 	/// </summary>
 	/// <param name="pos">：生成位置</param>
-	void CreateEnemy(DXf3 pos);
+	virtual void CreateEnemy(DXf3 pos);
 
 	/// <summary>
 	/// ノーマルの敵を生成
 	/// </summary>
 	virtual void CreateEnemyNormal(DXf3 pos, int type, DXf3 move = { 5.0f, 5.0f, 5.0f });
+
+	/// <summary>
+	/// 敵を消す
+	/// </summary>
+	void Delete();
 
 	/// <summary>
 	///	弾の数を入手

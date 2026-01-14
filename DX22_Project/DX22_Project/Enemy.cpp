@@ -96,6 +96,13 @@ void Enemy::CreateEnemyNormal(DXf3 pos, int type, DXf3 move)
 	m_nLife = m_nMaxLife;
 }
 
+void Enemy::Delete()
+{
+	m_nLife = 0;
+	m_bActive = false;
+	if (m_pBullet) m_pBullet->Stop();
+}
+
 int Enemy::GetBulletNum() const
 {
 	return m_nBulletNum;
