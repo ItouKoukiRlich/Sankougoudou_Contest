@@ -77,7 +77,11 @@ SceneGame::SceneGame()
 	}
 
 	//‰Šú‚©‚ç‚¢‚é“G‚ğİ’u
-	CreateEnemyField(nmEnemyArray::eCreate, { 0.0f, 0.0f, 10.0f });
+	CreateEnemyField(nmEnemyArray::eCreate, { -50.0f, 0.0f, 100.0f });
+	CreateEnemyField(nmEnemyArray::eCreate, { -25.0f, 0.0f, 100.0f });
+	CreateEnemyField(nmEnemyArray::eCreate, { 0.0f, 0.0f, 100.0f });
+	CreateEnemyField(nmEnemyArray::eCreate, { 25.0f, 0.0f, 100.0f });
+	CreateEnemyField(nmEnemyArray::eCreate, { 50.0f, 0.0f, 100.0f });
 	//CreateEnemy(nmEnemyArray::eTurret, {  0.0f, 0.0f, 10.0f });
 	//CreateEnemy(nmEnemyArray::eTurret, {  0.0f, 0.0f, -10.0f });
 	//CreateEnemy(nmEnemyArray::eTurret, {  10.0f, 0.0f, 0.0f });
@@ -111,8 +115,11 @@ void SceneGame::Update()
 {
 	if (IsKeyTrigger('B'))
 	{
-		CreateEnemyField(nmEnemyArray::eSuper, { 30.0f, 0.0f, 50.0f });
-		CreateEnemyField(nmEnemyArray::eSuper, { -30.0f, 0.0f, 50.0f });
+		CreateEnemyField(nmEnemyArray::eCreate, { -50.0f, 0.0f, 200.0f });
+		CreateEnemyField(nmEnemyArray::eCreate, { -25.0f, 0.0f, 200.0f });
+		CreateEnemyField(nmEnemyArray::eCreate, { 0.0f, 0.0f, 200.0f });
+		CreateEnemyField(nmEnemyArray::eCreate, { 25.0f, 0.0f, 200.0f });
+		CreateEnemyField(nmEnemyArray::eCreate, { 50.0f, 0.0f, 200.0f });
 	}
 
 	switch (m_phase)
