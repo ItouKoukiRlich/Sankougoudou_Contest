@@ -151,6 +151,7 @@
     <ClCompile Include="Clear.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="CreateEnemy.cpp" />
+    <ClCompile Include="CutIn.cpp" />
     <ClCompile Include="DebugBlock.cpp" />
     <ClCompile Include="DirectX.cpp" />
     <ClCompile Include="Effect.cpp" />
@@ -207,6 +208,7 @@
     <ClInclude Include="Clear.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="CreateEnemy.h" />
+    <ClInclude Include="CutIn.h" />
     <ClInclude Include="DebugBlock.h" />
     <ClInclude Include="Defines.h" />
     <ClInclude Include="DirectX.h" />

@@ -11,6 +11,11 @@ public:
 	{
 		eStart = 0,
 		eMission1,
+		eMission2,
+		eCutin1,
+		eMission3,
+		eSuper,
+		eMission4,
 		eTypeMax
 	};
 

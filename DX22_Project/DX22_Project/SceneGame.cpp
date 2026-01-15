@@ -77,24 +77,29 @@ SceneGame::SceneGame()
 	}
 
 	//初期からいる敵を設置
-	CreateEnemyField(nmEnemyArray::eCreate, { -50.0f, 0.0f, 100.0f });
-	CreateEnemyField(nmEnemyArray::eCreate, { -25.0f, 0.0f, 100.0f });
-	CreateEnemyField(nmEnemyArray::eCreate, { 0.0f, 0.0f, 100.0f });
-	CreateEnemyField(nmEnemyArray::eCreate, { 25.0f, 0.0f, 100.0f });
-	CreateEnemyField(nmEnemyArray::eCreate, { 50.0f, 0.0f, 100.0f });
-	//CreateEnemy(nmEnemyArray::eTurret, {  0.0f, 0.0f, 10.0f });
-	//CreateEnemy(nmEnemyArray::eTurret, {  0.0f, 0.0f, -10.0f });
-	//CreateEnemy(nmEnemyArray::eTurret, {  10.0f, 0.0f, 0.0f });
-	//CreateEnemy(nmEnemyArray::eTurret, {  -10.0f, 0.0f, 0.0f });
-	//CreateNormalEnemy({ 20.0f, 0.0f, 20.0f },	NormalEnemy::e12);
-	//CreateNormalEnemy({ -20.0f, 0.0f, 20.0f },	NormalEnemy::e21);
-	//CreateNormalEnemy({ 20.0f, 0.0f, -20.0f },	NormalEnemy::e12tate);
-	//CreateNormalEnemy({ -20.0f, 0.0f, -20.0f }, NormalEnemy::e21tate);
-	//CreateEnemy(nmEnemyArray::eTurret, {  0.0f, 0.0f, 10.0f });
-	//CreateEnemy(nmEnemyArray::eTurret, { 25.0f, 0.0f, 30.0f });
-	//CreateEnemy(nmEnemyArray::eTurret, {-25.0f, 0.0f, 30.0f });
-	m_pMission[Mission::eCreate]->MissionStart();
-	CreateEnemy::SetMissionFlag(true);
+	CreateEnemyField(eTurret, {  100.0f, 0.0f,  100.0f });
+	CreateEnemyField(eTurret, { -100.0f, 0.0f,  100.0f });
+	CreateEnemyField(eTurret, {    0.0f, 0.0f, -100.0f });
+	CreateEnemyField(eTurret, {    0.0f, 10.0f, 100.0f });
+	CreateEnemyField(eTurret, {    0.0f, -10.0f, 100.0f });
+	CreateEnemyField(eCreate, {   30.0f,  0.0f, 100.0f });
+	CreateEnemyField(eCreate, {  -30.0f,  0.0f, 100.0f });
+
+	CreateNormalEnemy({   0.0f, 0.0f, 10.0f }, NormalEnemy::e21);
+	CreateNormalEnemy({  20.0f, 0.0f, 20.0f }, NormalEnemy::e12tate);
+	CreateNormalEnemy({ -20.0f, 0.0f, 20.0f }, NormalEnemy::e12tate);
+	CreateNormalEnemy({   0.0f, 0.0f, 20.0f }, NormalEnemy::e21tate, {9.0f, 5.0f, 5.0f});
+	CreateNormalEnemy({ -20.0f, 5.0f, 30.0f }, NormalEnemy::e21);
+	CreateNormalEnemy({  20.0f, 5.0f, 30.0f }, NormalEnemy::e21);
+	CreateNormalEnemy({ -20.0f, -5.0f, 30.0f }, NormalEnemy::e21);
+	CreateNormalEnemy({  20.0f, -5.0f, 30.0f }, NormalEnemy::e21);
+
+	//CreateNormalEnemy({   0.0f, 0.0f, 10.0f }, NormalEnemy::e21);
+
+	//CreateEnemyField(eNormal, {    0.0f, 0.0f,  10.0f });
+	//CreateEnemyField(eNormal, {   20.0f, 0.0f,  10.0f });
+	//CreateEnemyField(eNormal, {  -20.0f, 0.0f,  10.0f });
+	
 }
 
 SceneGame::~SceneGame()
@@ -113,15 +118,6 @@ SceneGame::~SceneGame()
 
 void SceneGame::Update()
 {
-	if (IsKeyTrigger('B'))
-	{
-		CreateEnemyField(nmEnemyArray::eCreate, { -50.0f, 0.0f, 200.0f });
-		CreateEnemyField(nmEnemyArray::eCreate, { -25.0f, 0.0f, 200.0f });
-		CreateEnemyField(nmEnemyArray::eCreate, { 0.0f, 0.0f, 200.0f });
-		CreateEnemyField(nmEnemyArray::eCreate, { 25.0f, 0.0f, 200.0f });
-		CreateEnemyField(nmEnemyArray::eCreate, { 50.0f, 0.0f, 200.0f });
-	}
-
 	switch (m_phase)
 	{
 	case SceneGame::Phase::eGame:
@@ -134,16 +130,26 @@ void SceneGame::Update()
 				m_pEnemy[i]->Update();
 		}
 
-		////---- テクスチャメッセージ ----
-		//if (m_nGameCount == 0)
-		//	m_MessageWindow.Start(MessageWindow::eMission1);
-		//else if (m_nGameCount == 215)
-		//{
-		//	m_GameUI.PlayMissionEffect(MissionEffect::eAnimeStart);
-		//	m_pMission[Mission::eTurret]->MissionStart();
-		//	TurretEnemy::SetMissionFlag(true);
-		//}
-		//m_nGameCount++;
+		//---- テクスチャメッセージ ----
+		if (m_nGameCount == 0)
+			m_MessageWindow.Start(MessageWindow::eMission1);
+		else if (m_nGameCount == 310)
+		{
+			m_GameUI.PlayMissionEffect(MissionEffect::eAnimeStart);
+			m_pMission[Mission::eTurret]->MissionStart();
+			TurretEnemy::SetMissionFlag(true);
+		}
+		else if (m_nGameCount == 400)
+		{
+			m_MessageWindow.Start(MessageWindow::eMission2);
+		}
+		else if (m_nGameCount == 700)
+		{
+			m_GameUI.PlayMissionEffect(MissionEffect::eAnimeStart);
+			m_pMission[Mission::eCreate]->MissionStart();
+			CreateEnemy::SetMissionFlag(true);
+		}
+		m_nGameCount++;
 
 		//---- ゲーム内オブジェクトの更新処理が終わってから当たり判定を確認 ----
 		Collision();
