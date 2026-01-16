@@ -34,6 +34,8 @@ public:
 	/// <param name="angle"></param>
 	void AddRadY(float angle);
 
+	void RessetDegree();
+
 private:
 	static constexpr float	cm_PlayerAndCameraRadius = 4.0f;
 	const float				cm_Move		= 0.1f;						//ˆÚ“®—Ê

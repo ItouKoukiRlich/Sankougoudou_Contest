@@ -72,6 +72,8 @@ public:
 	/// <returns>ÅFñ≥ìGÇ»ÇÁtrue</returns>
 	bool GetBarrier() const;
 
+	void Resste();
+
 	NormalBullet* GetNormalBullet();
 	SpeedBullet* GetSpeedBullet();
 

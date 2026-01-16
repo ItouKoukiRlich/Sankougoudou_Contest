@@ -4,6 +4,8 @@
 #include"NormalEnemy.h"
 #include"Player.h"
 
+#define DethEffect u"Assets/Effect/bomb.efkefc"
+
 Camera* Enemy::m_pCamera = nullptr;
 Player* Enemy::m_pPlayer = nullptr;
 
@@ -17,6 +19,8 @@ Enemy::Enemy()
 {
 	m_Collision.center = {};
 	m_Collision.radius = 0.5f;
+
+	EFK_INS->Load(DethEffect);
 }
 
 Enemy::~Enemy()
@@ -101,6 +105,9 @@ void Enemy::Delete()
 	m_nLife = 0;
 	m_bActive = false;
 	if (m_pBullet) m_pBullet->Stop();
+	//消えるエフェクトを再生
+	int num = 0;
+	EFK_INS->Play(DethEffect, m_Pos, &num);
 }
 
 int Enemy::GetBulletNum() const
@@ -120,7 +127,12 @@ bool Enemy::MinusHP(int damage)
 	{
 		m_nLife = 0;
 		m_bActive = false;
-		if (m_pBullet) m_pBullet->Stop();
+		if (m_pBullet) 
+			m_pBullet->Stop();
+		//消えるエフェクトを再生
+		int num = 0;
+		EFK_INS->Play(DethEffect, m_Pos, &num);
+
 		return true;
 	}
 

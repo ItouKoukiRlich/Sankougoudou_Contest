@@ -1,6 +1,7 @@
 //==== インクルード部 ====
 #include "MainEnemy.h"
 #include"ShaderList.h"
+#include"MainEnemyBullet.h"
 
 bool	MainEnemy::m_bMission	= false;
 Model*  MainEnemy::m_pModel		= nullptr;
@@ -11,10 +12,12 @@ namespace nameMainEnemy
 	constexpr float cg_DrawHpPos = 4.0f;	//位置からどのくらい離れているか
 	constexpr float cg_DrawIconPos = 6.0f;	//位置からどのくらい離れているか
 	constexpr float cg_Size = 3.0f;
+	constexpr int ShotTime = 180;	//何フレーム置きに発射するか
 }
 using namespace nameMainEnemy;
 
 MainEnemy::MainEnemy()
+	:m_nCount(0)
 {
 	//---- モデル確保 ----
 	if (!m_pModel)
@@ -27,7 +30,8 @@ MainEnemy::MainEnemy()
 	}
 
 	//---- 弾を確保 ----
-	m_nBulletNum = 0;		//弾の数は１
+	m_nBulletNum = 1;		//弾の数は１
+	m_pBullet = new MainEnemyBullet;
 
 	//---- ライフ ----
 	m_nLife = m_nMaxLife = cg_MaxHP;
@@ -44,12 +48,26 @@ MainEnemy::~MainEnemy()
 
 void MainEnemy::Update()
 {
-
+	m_nCount++;
+	m_pBullet->Update();
+	if (m_nCount >= ShotTime)
+	{
+		m_pBullet->CreateBullet(m_Pos);
+		m_nCount = 0;
+	}
 }
 
 void MainEnemy::Draw()
 {
-
+	if (!m_bActive) return;
+	if (m_bMission)
+	{
+		m_Icon.SetPos({ m_Pos.x, m_Pos.y + cg_DrawIconPos, m_Pos.z });
+		m_Icon.Draw();
+	}
+	ModelDraw(m_pModel);
+	m_pBullet->Draw();
+	m_HPui.Draw(cg_MaxHP, m_nLife, { m_Pos.x, m_Pos.y + cg_DrawHpPos, m_Pos.z });
 }
 
 void MainEnemy::SetMissionFlag(bool flag)

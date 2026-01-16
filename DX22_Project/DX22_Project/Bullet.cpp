@@ -35,6 +35,10 @@ void Bullet::CreateBullet(DirectX::XMVECTOR vec, DirectX::XMFLOAT3 pos)
 {
 }
 
+void Bullet::CreateBullet(DXf3 pos)
+{
+}
+
 bool Bullet::GetActive() const
 {
 	return m_bActive;
@@ -52,7 +56,7 @@ int Bullet::GetDamage() const
 
 void Bullet::Stop()
 {
-	EFK_INS->Stop(m_handle);
+ 	EFK_INS->Stop(m_handle);
 	m_bActive = false;
 }
 

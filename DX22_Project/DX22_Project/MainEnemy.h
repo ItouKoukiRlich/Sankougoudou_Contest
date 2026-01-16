@@ -25,7 +25,7 @@ private:
 	static bool		m_bMission;
 
 private:
-
+	int m_nCount;
 };
 
 #endif

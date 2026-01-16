@@ -224,6 +224,15 @@ bool Player::GetBarrier() const
 	return m_bBarrier;
 }
 
+void Player::Resste()
+{
+	m_Move[0] = 0.0f;
+	m_Move[1] = 0.0f;
+	m_Move[2] = 0.0f;
+	m_State = eNormal;
+	m_Angle = DirectX::XMFLOAT3{ 0.0f, 0.0f, 0.0f };
+}
+
 NormalBullet* Player::GetNormalBullet()
 {
 	return m_pBullet;

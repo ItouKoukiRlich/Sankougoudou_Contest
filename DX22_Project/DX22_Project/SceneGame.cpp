@@ -20,6 +20,7 @@
 #include"CreateEnemy.h"
 #include"SuperEnemy.h"
 #include"MainEnemy.h"
+#include"MainEnemyBullet.h"
 using namespace nameSceneGame;
 using namespace nmEnemyArray;
 
@@ -38,6 +39,7 @@ SceneGame::SceneGame()
 	SetDepthTest(true);						//奥行を認知
 	Enemy::SetCamera(m_pCamera);
 	Enemy::SetPlayer(m_pPlayer);
+	MainEnemyBullet::SetPlayer(m_pPlayer);
 	TurretEnemy::SetPlayer(m_pPlayer);
 	EnemyIcon::SetCamera(m_pCamera);
 	EnemyHP::SetCamera(m_pCamera);
@@ -78,11 +80,11 @@ SceneGame::SceneGame()
 	}
 
 	//初期からいる敵を設置
-	CreateEnemyField(eTurret, {  100.0f,  0.0f,  50.0f });
-	CreateEnemyField(eTurret, { -100.0f,  0.0f,  50.0f });
-	CreateEnemyField(eTurret, {    0.0f,  0.0f,  50.0f });
-	CreateEnemyField(eTurret, {    0.0f, 10.0f,  50.0f });
-	CreateEnemyField(eTurret, {    0.0f, 10.0f,  50.0f });
+	CreateEnemyField(eTurret, { 10.0f, 0.0f, 10.0f });
+	CreateEnemyField(eTurret, { 0.0f, 0.0f, 10.0f });
+	CreateEnemyField(eTurret, { -10.0f, 0.0f, 10.0f });
+	
+	
 }
 
 SceneGame::~SceneGame()
@@ -101,7 +103,8 @@ SceneGame::~SceneGame()
 
 void SceneGame::Update()
 {
-	if (IsKeyTrigger('B')) m_phase = eCutIn;
+	if (IsKeyTrigger('B'))
+		ResetPlayer();
 
 	m_MessageWindow.Update();	//メッセージウィンドの更新処理
 	
@@ -217,6 +220,12 @@ void SceneGame::Update()
 			m_Step = eStep5;
 			m_nGameCount = 0;
 			m_GameUI.PlayMissionEffect(MissionEffect::eAnimeStart);
+			m_pMission[Mission::eMain]->MissionStart();
+			MainEnemy::SetMissionFlag(true);
+			//敵を生成
+			CreateEnemyField(eMain, { -10.0f, 0.0f, 10.0f });
+			CreateEnemyField(eMain, {   0.0f, 0.0f, 10.0f });
+			CreateEnemyField(eMain, {  10.0f, 0.0f, 10.0f });
 		}
 		break;
 	}
@@ -606,7 +615,8 @@ void SceneGame::ResetPlayer()
 	m_pPlayer->SetPos({ 0.0f, 0.0f, 0.0f });	//プレイヤーの位置を初期位置に戻す
 	m_pCamera->SetLook({ 0.0f, 0.0f, 5.65f });
 	m_pCamera->SetPos({ 0, -2.5, -5.65 });
-	//プレイヤーの移動量・モードもリセット
+	m_pCamera->RessetDegree();
+	m_pPlayer->Resste();//プレイヤーの移動量・モードもリセット
 }
 
 void SceneGame::GameDraw()

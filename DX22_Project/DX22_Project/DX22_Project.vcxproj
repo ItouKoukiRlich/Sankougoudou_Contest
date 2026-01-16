@@ -166,6 +166,7 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainEnemy.cpp" />
+    <ClCompile Include="MainEnemyBullet.cpp" />
     <ClCompile Include="MeshBuffer.cpp" />
     <ClCompile Include="MessageWindow.cpp" />
     <ClCompile Include="Mission.cpp" />
@@ -230,6 +231,7 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="MainEnemy.h" />
+    <ClInclude Include="MainEnemyBullet.h" />
     <ClInclude Include="MathStruct.h" />
     <ClInclude Include="MeshBuffer.h" />
     <ClInclude Include="MessageWindow.h" />

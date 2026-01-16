@@ -255,6 +255,9 @@
     <ClCompile Include="CameraCutIn.cpp">
       <Filter>ソース ファイル\SceneGame\CatIn</Filter>
     </ClCompile>
+    <ClCompile Include="MainEnemyBullet.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Geometory.h">
@@ -430,6 +433,9 @@
     </ClInclude>
     <ClInclude Include="CameraCutIn.h">
       <Filter>ヘッダー ファイル\SceneGame\CutIn</Filter>
+    </ClInclude>
+    <ClInclude Include="MainEnemyBullet.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

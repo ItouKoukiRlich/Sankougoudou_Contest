@@ -23,6 +23,8 @@ public:
 	/// <param name="pos">F’e‚Ì”­ËˆÊ’u</param>
 	virtual void CreateBullet(DirectX::XMVECTOR vec, DirectX::XMFLOAT3 pos);
 
+	virtual void CreateBullet(DXf3 pos);
+
 	/// <summary>
 	/// ”­Ë‚µ‚Ä‚¢‚é‚©
 	/// </summary>

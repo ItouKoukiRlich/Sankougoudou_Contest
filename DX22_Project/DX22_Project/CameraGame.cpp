@@ -87,3 +87,8 @@ void CameraGame::AddRadY(float angle)
 {
 	m_radY += DirectX::XMConvertToRadians(angle);
 }
+
+void CameraGame::RessetDegree()
+{
+	m_Degree = -45.0f;
+}
