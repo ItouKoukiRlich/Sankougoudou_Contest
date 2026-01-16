@@ -13,4 +13,12 @@ void Draw();
 /// </summary>
 HWND GetHWND();
 
+enum SceneType
+{
+	eTitle,
+	eGame,
+};
+
+void proChangeScene(SceneType next);
+
 #endif // __MAIN_H__

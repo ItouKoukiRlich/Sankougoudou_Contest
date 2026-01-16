@@ -149,6 +149,7 @@
     <ClCompile Include="CameraDebug.cpp" />
     <ClCompile Include="CameraGame.cpp" />
     <ClCompile Include="CameraTitle.cpp" />
+    <ClCompile Include="ChangeScene.cpp" />
     <ClCompile Include="Clear.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="CreateEnemy.cpp" />
@@ -159,6 +160,8 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyHP.cpp" />
     <ClCompile Include="EnemyIcon.cpp" />
+    <ClCompile Include="Fade.cpp" />
+    <ClCompile Include="GameMenu.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="GameUI.cpp" />
@@ -208,6 +211,7 @@
     <ClInclude Include="CameraDebug.h" />
     <ClInclude Include="CameraGame.h" />
     <ClInclude Include="CameraTitle.h" />
+    <ClInclude Include="ChangeScene.h" />
     <ClInclude Include="Clear.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="CreateEnemy.h" />
@@ -223,7 +227,9 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyHP.h" />
     <ClInclude Include="EnemyIcon.h" />
+    <ClInclude Include="Fade.h" />
     <ClInclude Include="Function.h" />
+    <ClInclude Include="GameMenu.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameOver.h" />
     <ClInclude Include="GameUI.h" />

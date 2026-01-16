@@ -3,6 +3,7 @@
 #include"CameraTitle.h"
 #include"Geometory.h"
 #include"Input.h"
+#include"Main.h"
 
 //==== 定数・マクロ定義 ====
 #define SmokeJetEFK u"Assets/Effect/SmokeJet.efkefc"				//エフェクトのファイルパス
@@ -18,6 +19,8 @@ SceneTitle::SceneTitle()
 	m_pCamera = new CameraTitle;
 	EFK_INS->SetCamera(m_pCamera);
 	EFK_INS->Load(SmokeJetEFK);
+
+
 }
 
 SceneTitle::~SceneTitle()
@@ -28,6 +31,11 @@ SceneTitle::~SceneTitle()
 
 void SceneTitle::Update()
 {
+	if (IsKeyTrigger(VK_SPACE))
+	{
+		proChangeScene(eGame);
+	}
+
 	m_pCamera->Update();
 	m_TitleUI.Update();
 	

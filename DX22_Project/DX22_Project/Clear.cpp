@@ -1,6 +1,9 @@
 //==== インクルード部 ====
 #include "Clear.h"
 #include"Effect.h"
+#include"Main.h"
+#include"Input.h"
+#include"ChangeScene.h"
 
 namespace nameClear
 {
@@ -78,6 +81,11 @@ void Clear::Update()
 		m_Angle += 0.05f;
 		if (m_Angle > 180.0f) m_Angle = 0.0f;
 		m_ui.ChangeColor(eFont, 1.0f, 0.0f, 0.0f, sinf(m_Angle));
+		if (IsKeyTrigger(VK_RETURN))
+		{
+			if (!ChangeScene::CheckFade())
+				proChangeScene(eTitle);
+		}
 		break;
 	}
 	m_nAnimeCount++;

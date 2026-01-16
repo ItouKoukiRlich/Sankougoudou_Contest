@@ -21,17 +21,29 @@
 #include"SuperEnemy.h"
 #include"MainEnemy.h"
 #include"MainEnemyBullet.h"
+#include"Main.h"
 using namespace nameSceneGame;
 using namespace nmEnemyArray;
+
+namespace SF
+{
+	constexpr DXf3 CameraPos		= { 0.0f, 0.0f, -5.65f };
+	constexpr DXf3 CameraInitPos	= { 0.0f, 100.0f, -500.0f };
+	constexpr DXf3 CameraInitLook	= { 0.0f, 100.0f, -488.7f };
+
+	constexpr float moveZ =   (-5.65f - -500.0f) / 120.0f;
+	constexpr float moveY =   100.0f / 180.0f;
+}
 
 SceneGame::SceneGame()
 	:m_pCamera(new CameraGame)
 	,m_pPlayer(new Player)
 	,m_pEnemy()
-	,m_phase(SceneGame::Phase::eGame)
+	,m_phase(SceneGame::Phase::eStart)
 	,m_nGameOverCount(0)
 	,m_nGameCount(0)
 	,m_Step(GameStep::eStep1)
+	,startstep(0)
 {
 	RenderTarget* pRTV = GetDefaultRTV();	//レンダーターゲット
 	DepthStencil* pDSV = GetDefaultDSV();	//デプス
@@ -79,12 +91,15 @@ SceneGame::SceneGame()
 		m_GameUI.CreateWarningUI(*m_pPlayer);
 	}
 
+	m_pCamera->SetLook(SF::CameraInitLook);
+	m_pCamera->SetPos(SF::CameraInitPos);
+
 	//初期からいる敵を設置
 	CreateEnemyField(eTurret, { 10.0f, 0.0f, 10.0f });
 	CreateEnemyField(eTurret, { 0.0f, 0.0f, 10.0f });
 	CreateEnemyField(eTurret, { -10.0f, 0.0f, 10.0f });
 	
-	
+	m_MessageWindow.Start(MessageWindow::eStart);
 }
 
 SceneGame::~SceneGame()
@@ -103,13 +118,43 @@ SceneGame::~SceneGame()
 
 void SceneGame::Update()
 {
-	if (IsKeyTrigger('B'))
-		ResetPlayer();
-
-	m_MessageWindow.Update();	//メッセージウィンドの更新処理
-	
 	switch (m_phase)
 	{
+	case SceneGame::Phase::eStart:
+		m_MessageWindow.Update();
+		switch (startstep)
+		{
+		case 0:
+			m_pCamera->SetLook({ SF::CameraInitLook.x, SF::CameraInitLook.y, SF::CameraInitLook.z + SF::moveZ * (float)m_nGameCount });
+			m_pCamera->SetPos({SF::CameraInitPos.x, SF::CameraInitPos.y, SF::CameraInitPos.z + SF::moveZ * (float)m_nGameCount});
+			m_nGameCount++;
+			if (m_pCamera->GetLook().z >= 5.65f)
+			{
+				m_nGameCount = 0;
+				startstep = 1;
+			}
+			break;
+
+		case 1:
+			m_pCamera->SetLook({ SF::CameraInitLook.x, SF::CameraInitLook.y + -SF::moveY * (float)m_nGameCount, 5.65f});
+			m_pCamera->SetPos({ SF::CameraInitPos.x, SF::CameraInitPos.y + -SF::moveY * (float)m_nGameCount, -5.65f});
+			m_nGameCount++;
+			if (m_pCamera->GetPos().y < 2.5f)
+			{
+				m_pCamera->SetPos({ 0.0f, 2.0f, -5.65f });
+			}
+			if (m_pCamera->GetLook().y <= 0.0f)
+			{
+				m_pPlayer->SetPos({ 0.0f, 0.0f, 0.0f });	//プレイヤーの位置を初期位置に戻す
+				m_pCamera->SetLook({ 0.0f, 0.0f, 5.65f });
+				m_pCamera->SetPos({ 0.0f, 2.0f, -5.65f });
+				m_phase = eGame;
+				m_nGameCount = 0;
+			}
+			break;
+		}
+		break;
+
 	case SceneGame::Phase::eGame:
 		m_pPlayer->Update();		//プレイヤー
 		m_pCamera->Update();		//ゲーム内カメラ
@@ -118,6 +163,7 @@ void SceneGame::Update()
 			if (m_pEnemy[i]->CheckActive())
 				m_pEnemy[i]->Update();
 		}
+		m_MessageWindow.Update();	//メッセージウィンドの更新処理
 
 		//---- テクスチャメッセージ ----
 		TextureMessage();
@@ -155,6 +201,10 @@ void SceneGame::Update()
 		//---- 最後にゲームオーバーかを判定 ----
 		if (m_pPlayer->GetHP() == 0) StartGameOver(GameOver::Type::eDead);
 		else if (CheckOutField()) StartGameOver(GameOver::Type::eOutField);
+
+		if (m_phase != eDelay && IsKeyTrigger(VK_ESCAPE))
+			m_phase = eMenu;
+
 		break;
 
 	case SceneGame::Phase::eGameOver:
@@ -180,6 +230,7 @@ void SceneGame::Update()
 		break;
 
 	case SceneGame::eCutIn:
+		m_MessageWindow.Update();	//メッセージウィンドの更新処理
 		m_CutIn.Update();
 		m_nGameCount++;
 		if (m_nGameCount == 310)
@@ -206,11 +257,13 @@ void SceneGame::Update()
 			CreateNormalEnemy({  20.0f, 5.0f, 30.0f }, NormalEnemy::e21);
 			CreateNormalEnemy({ -20.0f, -5.0f, 30.0f }, NormalEnemy::e21);
 			CreateNormalEnemy({  20.0f, -5.0f, 30.0f }, NormalEnemy::e21);
-
+			
+			ResetPlayer();	//プレイヤーをリセット
 		}
 		break;
 
 	case SceneGame::eCutIn2:
+		m_MessageWindow.Update();	//メッセージウィンドの更新処理
 		m_CutIn.Update();
 		m_nGameCount++;
 		if (m_nGameCount == 310)
@@ -227,6 +280,15 @@ void SceneGame::Update()
 			CreateEnemyField(eMain, {   0.0f, 0.0f, 10.0f });
 			CreateEnemyField(eMain, {  10.0f, 0.0f, 10.0f });
 		}
+		ResetPlayer();	//プレイヤーをリセット
+		break;
+
+	case eMenu:
+		m_menu.Update();
+		if (IsKeyTrigger(VK_ESCAPE))
+			m_phase = eGame;
+		else if (IsKeyTrigger(VK_TAB))
+			proChangeScene(eTitle);
 		break;
 	}
 
@@ -256,6 +318,10 @@ void SceneGame::Draw()
 	
 	switch (m_phase)
 	{
+	case SceneGame::Phase::eStart:
+		GameDraw();
+		break;
+
 	case SceneGame::Phase::eGame:
 		GameDraw();
 		SetRenderTargets(1, &pRTV, nullptr);
@@ -293,6 +359,12 @@ void SceneGame::Draw()
 		m_CutIn.Draw();
 		SetRenderTargets(1, &pRTV, nullptr);
 		m_MessageWindow.Draw();
+		SetRenderTargets(1, &pRTV, pDSV);
+		break;
+
+	case eMenu:
+		SetRenderTargets(1, &pRTV, nullptr);
+		m_menu.Draw();
 		SetRenderTargets(1, &pRTV, pDSV);
 		break;
 	}
@@ -614,7 +686,7 @@ void SceneGame::ResetPlayer()
 {
 	m_pPlayer->SetPos({ 0.0f, 0.0f, 0.0f });	//プレイヤーの位置を初期位置に戻す
 	m_pCamera->SetLook({ 0.0f, 0.0f, 5.65f });
-	m_pCamera->SetPos({ 0, -2.5, -5.65 });
+	m_pCamera->SetPos({ 0, 2.5, -5.65 });
 	m_pCamera->RessetDegree();
 	m_pPlayer->Resste();//プレイヤーの移動量・モードもリセット
 }

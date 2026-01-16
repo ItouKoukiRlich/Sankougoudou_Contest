@@ -9,10 +9,13 @@
 #include "Defines.h"
 #include "ShaderList.h"
 #include"Effect.h"
+#include"ChangeScene.h"
 
 //--- グローバル変数
 Scene*	g_pScene;
 HWND	g_hwnd;
+ChangeScene g_cs;
+SceneType g_Next;
 
 HRESULT Init(HWND hWnd, UINT width, UINT height)
 {
@@ -26,9 +29,10 @@ HRESULT Init(HWND hWnd, UINT width, UINT height)
 	Sprite::Init();
 	InitInput();
 	ShaderList::Init();
+	g_cs.SetingUI();
 
 	// シーン
-	g_pScene = new SceneGame();
+	g_pScene = new SceneTitle();
 
 	//ウィンド情報の保存
 	g_hwnd = hWnd;
@@ -52,6 +56,26 @@ void Update()
 {
 	UpdateInput();
 	g_pScene->RootUpdate();
+	g_cs.Update();
+	if (ChangeScene::CheckFade())
+	{
+		if (ChangeScene::AllBlack == ChangeScene::GetPhase())
+		{
+			delete g_pScene;
+			switch (g_Next)
+			{
+			case eGame:
+				g_pScene = new SceneGame;
+				break;
+
+			case eTitle:
+				g_pScene = new SceneTitle;
+				break;
+			}
+
+			ChangeScene::SetPhase(ChangeScene::FadeOut);
+		}
+	}
 }
 
 void Draw()
@@ -127,6 +151,10 @@ void Draw()
 #endif
 
 	g_pScene->RootDraw();
+
+	//フェードの処理
+	g_cs.Draw();
+
 	EndDrawDirectX();
 }
 
@@ -135,4 +163,8 @@ HWND GetHWND()
 	return g_hwnd;
 }
 
-// EOF
+void proChangeScene(SceneType next)
+{
+	ChangeScene::StartFade();	//フェード開始
+	g_Next = next;
+}

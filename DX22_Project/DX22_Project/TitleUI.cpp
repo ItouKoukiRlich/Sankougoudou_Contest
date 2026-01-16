@@ -88,7 +88,11 @@ void TitleUI::Update()
 
 void TitleUI::Draw()
 {
+	RenderTarget* pRTV = GetDefaultRTV();
+	DepthStencil* pDSV = GetDefaultDSV();
+	SetRenderTargets(1, &pRTV, nullptr);
 	m_ui.Draw();
+	SetRenderTargets(1, &pRTV, pDSV);
 }
 
 void TitleUI::AnimeProcess()

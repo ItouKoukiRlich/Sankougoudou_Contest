@@ -1,6 +1,8 @@
 //==== インクルード部 ====
 #include "Gameover.h"
-
+#include"Input.h"
+#include"Main.h"
+#include"ChangeScene.h"
 namespace nameGameOver
 {
 	constexpr int cg_nFlashFlame = 20;
@@ -23,6 +25,14 @@ GameOver::~GameOver()
 
 void GameOver::Update()
 {
+	if (IsKeyTrigger(VK_RETURN) || IsKeyTrigger(VK_SPACE))
+	{
+		if (!ChangeScene::CheckFade())
+		{
+			proChangeScene(eTitle);
+		}
+	}
+
 	m_ui.ChangeColor(eBack, 1.0f, 1.0f, 1.0f, m_alpha);
 	m_ui.ChangeColor(eFont, 1.0f, 1.0f, 1.0f, m_alpha);
 	m_alpha += 0.01f;

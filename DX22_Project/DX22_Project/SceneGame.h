@@ -12,6 +12,7 @@
 #include"GameOver.h"
 #include"Clear.h"
 #include"CutIn.h"
+#include"GameMenu.h"
 
 //==== 定数・マクロ定義 ====
 namespace nameSceneGame
@@ -81,6 +82,8 @@ private:
 		eClear,		//クリア
 		eCutIn,
 		eCutIn2,
+		eMenu,
+		eStart,
 	};
 
 	enum GameStep
@@ -129,6 +132,8 @@ private:
 	int					m_nGameCount;		//ゲームのカウント
 	GameStep m_Step;
 	CutIn m_CutIn;
+	GameMenu m_menu;
+	int startstep;
 };
 
 #endif
