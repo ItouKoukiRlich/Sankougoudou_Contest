@@ -6,8 +6,15 @@
 
 // timeGetTime周りの使用
 #pragma comment(lib, "winmm.lib")
-#pragma comment(lib, "Effekseer.lib")
-#pragma comment(lib, "EffekseerRendererDX11.lib")
+
+#ifdef _DEBUG
+#pragma comment(lib, "Effekseer_Debug/Effekseer.lib")
+#pragma comment(lib, "Effekseer_Debug/EffekseerRendererDX11.lib")
+#else
+#pragma comment(lib, "Effekseer_Release/Effekseer.lib")
+#pragma comment(lib, "Effekseer_Release/EffekseerRendererDX11.lib")
+#endif
+
 
 //--- プロトタイプ宣言
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);

@@ -76,3 +76,8 @@ void Camera::SetLook(DirectX::XMFLOAT3 look)
 {
 	m_look = look;
 }
+
+void Camera::SetPos(DirectX::XMFLOAT3 pos)
+{
+	m_pos = pos;
+}

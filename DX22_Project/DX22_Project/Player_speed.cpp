@@ -115,7 +115,7 @@ void Player::Control_speed()
 	}
 
 	//---- ÉÇÅ[Éhêÿë÷ ----
-	if (IsKeyTrigger(VK_TAB))
+	if (IsKeyTrigger(VK_TAB) && m_State != eChangeToNormal && m_State != eChangeToSpeeed && m_State != eAvoid)
 	{
 		m_Move[Player::MoveDirection::Forward] = 0.0f;
 		ChangeMode();

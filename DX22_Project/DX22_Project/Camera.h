@@ -43,6 +43,11 @@ public:
 	/// <param name="look">：設定する注視点</param>
 	void SetLook(DirectX::XMFLOAT3 look);
 
+	/// <summary>
+	/// 位置の設定
+	/// </summary>
+	void SetPos(DirectX::XMFLOAT3 pos);
+
 protected:
 	DirectX::XMFLOAT3 m_pos;		//座標
 	DirectX::XMFLOAT3 m_look;		//注意点

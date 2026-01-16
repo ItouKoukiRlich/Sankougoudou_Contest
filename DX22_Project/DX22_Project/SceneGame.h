@@ -11,6 +11,7 @@
 #include"Mission.h"
 #include"GameOver.h"
 #include"Clear.h"
+#include"CutIn.h"
 
 //==== 定数・マクロ定義 ====
 namespace nameSceneGame
@@ -78,6 +79,17 @@ private:
 		eGameOver,	//ゲームオーバー
 		eDelay,		//ゲームゲーム時の間
 		eClear,		//クリア
+		eCutIn,
+		eCutIn2,
+	};
+
+	enum GameStep
+	{
+		eStep1,
+		eStep2,
+		eStep3,
+		eStep4,
+		eStep5
 	};
 
 private:
@@ -89,6 +101,19 @@ private:
 	/// </summary>
 	/// <param name="i"></param>
 	void EnemyMissionCount(int i);
+
+	/// <summary>
+	/// テクスチャメッセージの描画
+	/// </summary>
+	void TextureMessage();
+
+	/// <summary>
+	/// プレイヤーの位置をリセット
+	/// </summary>
+	void ResetPlayer();
+
+
+	void GameDraw();
 
 private:
 	GameOver			m_GameOver;			//ゲームオーバー
@@ -102,6 +127,8 @@ private:
 	SceneGame::Phase	m_phase;			//
 	int					m_nGameOverCount;	//ゲームオーバー以降の間をカウント
 	int					m_nGameCount;		//ゲームのカウント
+	GameStep m_Step;
+	CutIn m_CutIn;
 };
 
 #endif

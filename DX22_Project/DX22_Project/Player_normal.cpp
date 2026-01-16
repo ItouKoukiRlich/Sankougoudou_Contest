@@ -132,7 +132,7 @@ void Player::Control()
 	}
 
 	//---- ステート切替 ----
-	if (IsKeyTrigger(VK_TAB) && m_State != eAvoid) {
+	if (IsKeyTrigger(VK_TAB) && m_State != eAvoid && m_State != eChangeToNormal && m_State != eChangeToSpeeed) {
 		ChangeMode();
 	}
 }

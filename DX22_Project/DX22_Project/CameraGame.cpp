@@ -68,7 +68,9 @@ void CameraGame::Update()
 
 void CameraGame::Draw()
 {
+#ifdef _DEBUG
 	m_DebugBlock.Draw(m_look, this);
+#endif
 }
 
 void CameraGame::SetPlayer(Player* pPlayer)

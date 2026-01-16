@@ -3,7 +3,7 @@
 #include"Model.h"
 #include"NormalEnemyBullet.h"
 #include"Input.h"
-
+#include"ShaderList.h"
 namespace nameTarretEnemy
 {
 	constexpr int cg_MaxHP = 4;
@@ -97,6 +97,43 @@ void TurretEnemy::Draw()
 void TurretEnemy::SetMissionFlag(bool flag)
 {
 	m_bMission = flag;
+}
+
+void TurretEnemy::staticDraw(Camera* pCamera, DXf3 pos)
+{
+	//==== 頂点シェーダーに渡す変換行列の変数を宣言 ====
+	DirectX::XMFLOAT4X4 fWVP[3] = {};
+	fWVP[1] = pCamera->GetViewMatrix();
+	fWVP[2] = pCamera->GetProjectionMatrix();
+
+	//==== ワールド行列の作成 ====
+	DirectX::XMMATRIX world;
+	DirectX::XMMATRIX Translation = DirectX::XMMatrixTranslation(pos.x, pos.y, pos.z);
+	DirectX::XMMATRIX Scale = DirectX::XMMatrixScaling(1.0f, 1.0f, 1.0f);
+	world = Scale * Translation;
+	DirectX::XMStoreFloat4x4(&fWVP[0], DirectX::XMMatrixTranspose(world));
+
+	//シェーダーへの変換行列を設定
+	ShaderList::SetWVP(fWVP);
+
+	//モデルに使用する頂点シェーダー、ピクセルシェーダーを設定
+	m_pModel->SetVertexShader(ShaderList::GetVS(ShaderList::VS_WORLD));
+	m_pModel->SetPixelShader(ShaderList::GetPS(ShaderList::PS_UNLIT));
+	// マテリアル別にメッシュを表示 
+	for (unsigned int i = 0; i < m_pModel->GetMeshNum(); ++i)
+	{
+		// モデルのメッシュを取得 
+		const Model::Mesh mesh = *m_pModel->GetMesh(i);
+
+		// メッシュに割り当てられているマテリアルを取得 
+		Model::Material material = *m_pModel->GetMaterial(mesh.materialID);
+
+		// シェーダーへマテリアルを設定 
+		ShaderList::SetMaterial(material);
+
+		// モデルの描画 
+		m_pModel->Draw(i);
+	}
 }
 
 bool TurretEnemy::CheckShot()

@@ -30,6 +30,7 @@ SceneGame::SceneGame()
 	,m_phase(SceneGame::Phase::eGame)
 	,m_nGameOverCount(0)
 	,m_nGameCount(0)
+	,m_Step(GameStep::eStep1)
 {
 	RenderTarget* pRTV = GetDefaultRTV();	//レンダーターゲット
 	DepthStencil* pDSV = GetDefaultDSV();	//デプス
@@ -77,29 +78,11 @@ SceneGame::SceneGame()
 	}
 
 	//初期からいる敵を設置
-	CreateEnemyField(eTurret, {  100.0f, 0.0f,  100.0f });
-	CreateEnemyField(eTurret, { -100.0f, 0.0f,  100.0f });
-	CreateEnemyField(eTurret, {    0.0f, 0.0f, -100.0f });
-	CreateEnemyField(eTurret, {    0.0f, 10.0f, 100.0f });
-	CreateEnemyField(eTurret, {    0.0f, -10.0f, 100.0f });
-	CreateEnemyField(eCreate, {   30.0f,  0.0f, 100.0f });
-	CreateEnemyField(eCreate, {  -30.0f,  0.0f, 100.0f });
-
-	CreateNormalEnemy({   0.0f, 0.0f, 10.0f }, NormalEnemy::e21);
-	CreateNormalEnemy({  20.0f, 0.0f, 20.0f }, NormalEnemy::e12tate);
-	CreateNormalEnemy({ -20.0f, 0.0f, 20.0f }, NormalEnemy::e12tate);
-	CreateNormalEnemy({   0.0f, 0.0f, 20.0f }, NormalEnemy::e21tate, {9.0f, 5.0f, 5.0f});
-	CreateNormalEnemy({ -20.0f, 5.0f, 30.0f }, NormalEnemy::e21);
-	CreateNormalEnemy({  20.0f, 5.0f, 30.0f }, NormalEnemy::e21);
-	CreateNormalEnemy({ -20.0f, -5.0f, 30.0f }, NormalEnemy::e21);
-	CreateNormalEnemy({  20.0f, -5.0f, 30.0f }, NormalEnemy::e21);
-
-	//CreateNormalEnemy({   0.0f, 0.0f, 10.0f }, NormalEnemy::e21);
-
-	//CreateEnemyField(eNormal, {    0.0f, 0.0f,  10.0f });
-	//CreateEnemyField(eNormal, {   20.0f, 0.0f,  10.0f });
-	//CreateEnemyField(eNormal, {  -20.0f, 0.0f,  10.0f });
-	
+	CreateEnemyField(eTurret, {  100.0f,  0.0f,  50.0f });
+	CreateEnemyField(eTurret, { -100.0f,  0.0f,  50.0f });
+	CreateEnemyField(eTurret, {    0.0f,  0.0f,  50.0f });
+	CreateEnemyField(eTurret, {    0.0f, 10.0f,  50.0f });
+	CreateEnemyField(eTurret, {    0.0f, 10.0f,  50.0f });
 }
 
 SceneGame::~SceneGame()
@@ -118,11 +101,14 @@ SceneGame::~SceneGame()
 
 void SceneGame::Update()
 {
+	if (IsKeyTrigger('B')) m_phase = eCutIn;
+
+	m_MessageWindow.Update();	//メッセージウィンドの更新処理
+	
 	switch (m_phase)
 	{
 	case SceneGame::Phase::eGame:
 		m_pPlayer->Update();		//プレイヤー
-		m_MessageWindow.Update();	//メッセージウィンドの更新処理
 		m_pCamera->Update();		//ゲーム内カメラ
 		for (int i = 0; i < cg_MaxEnemy; i++)
 		{
@@ -131,26 +117,8 @@ void SceneGame::Update()
 		}
 
 		//---- テクスチャメッセージ ----
-		if (m_nGameCount == 0)
-			m_MessageWindow.Start(MessageWindow::eMission1);
-		else if (m_nGameCount == 310)
-		{
-			m_GameUI.PlayMissionEffect(MissionEffect::eAnimeStart);
-			m_pMission[Mission::eTurret]->MissionStart();
-			TurretEnemy::SetMissionFlag(true);
-		}
-		else if (m_nGameCount == 400)
-		{
-			m_MessageWindow.Start(MessageWindow::eMission2);
-		}
-		else if (m_nGameCount == 700)
-		{
-			m_GameUI.PlayMissionEffect(MissionEffect::eAnimeStart);
-			m_pMission[Mission::eCreate]->MissionStart();
-			CreateEnemy::SetMissionFlag(true);
-		}
-		m_nGameCount++;
-
+		TextureMessage();
+		
 		//---- ゲーム内オブジェクトの更新処理が終わってから当たり判定を確認 ----
 		Collision();
 
@@ -168,11 +136,11 @@ void SceneGame::Update()
 					//敵のアイコン表示も終了
 					switch (i)
 					{
-					case Mission::eTurret:  TurretEnemy::SetMissionFlag(false);
-					case Mission::eCreate:  CreateEnemy::SetMissionFlag(false);
-					case Mission::eNormal:  NormalEnemy::SetMissionFlag(false);
-					case Mission::eSuper:   SuperEnemy::SetMissionFlag(false);
-					case Mission::eMain:    MainEnemy::SetMissionFlag(false);
+					case Mission::eTurret:  TurretEnemy::SetMissionFlag(false); break;
+					case Mission::eCreate:  CreateEnemy::SetMissionFlag(false); break;
+					case Mission::eNormal:  NormalEnemy::SetMissionFlag(false); break;
+					case Mission::eSuper:   SuperEnemy::SetMissionFlag(false); break;
+					case Mission::eMain:    MainEnemy::SetMissionFlag(false); break;
 					}
 				}
 			}
@@ -207,6 +175,50 @@ void SceneGame::Update()
 	case SceneGame::eClear:
 		m_Clear.Update();
 		break;
+
+	case SceneGame::eCutIn:
+		m_CutIn.Update();
+		m_nGameCount++;
+		if (m_nGameCount == 310)
+		{
+			m_nGameCount = 0;
+			m_phase = eGame;
+			m_Step = eStep3;
+			m_CutIn.SetCutIn(CutIn::eCut2);
+
+			//敵を生成
+			CreateEnemyField(eCreate, { -10.0f, 0.0f, 10.0f });
+			CreateEnemyField(eCreate, {   0.0f, 0.0f, 10.0f });
+			CreateEnemyField(eCreate, {  10.0f, 0.0f, 10.0f });
+			CreateEnemyField(eSuper,  { -10.0f, 0.0f, 20.0f });
+			CreateEnemyField(eSuper,  {   0.0f, 0.0f, 20.0f });
+			CreateEnemyField(eSuper,  {  10.0f, 0.0f, 20.0f });
+			CreateEnemyField(eSuper,  {  0.0f, 5.0f, 20.0f });
+
+			CreateNormalEnemy({   0.0f, 0.0f, 10.0f }, NormalEnemy::e21);
+			CreateNormalEnemy({  20.0f, 0.0f, 20.0f }, NormalEnemy::e12tate);
+			CreateNormalEnemy({ -20.0f, 0.0f, 20.0f }, NormalEnemy::e12tate);
+			CreateNormalEnemy({   0.0f, 0.0f, 20.0f }, NormalEnemy::e21tate, {9.0f, 5.0f, 5.0f});
+			CreateNormalEnemy({ -20.0f, 5.0f, 30.0f }, NormalEnemy::e21);
+			CreateNormalEnemy({  20.0f, 5.0f, 30.0f }, NormalEnemy::e21);
+			CreateNormalEnemy({ -20.0f, -5.0f, 30.0f }, NormalEnemy::e21);
+			CreateNormalEnemy({  20.0f, -5.0f, 30.0f }, NormalEnemy::e21);
+
+		}
+		break;
+
+	case SceneGame::eCutIn2:
+		m_CutIn.Update();
+		m_nGameCount++;
+		if (m_nGameCount == 310)
+		{
+			m_nGameCount = 0;
+			m_phase = eGame;
+			m_Step = eStep5;
+			m_nGameCount = 0;
+			m_GameUI.PlayMissionEffect(MissionEffect::eAnimeStart);
+		}
+		break;
 	}
 
 	//---- エフェクトの更新処理(最後にやる) ----
@@ -219,6 +231,9 @@ void SceneGame::Draw()
 	Geometory::SetView(m_pCamera->GetViewMatrix());
 	Geometory::SetProjection(m_pCamera->GetProjectionMatrix());
 
+	RenderTarget* pRTV = GetDefaultRTV();
+	DepthStencil* pDSV = GetDefaultDSV();
+
 #ifdef _DEBUG
 	m_pCamera->Draw();
 
@@ -229,47 +244,46 @@ void SceneGame::Draw()
 	CreateBox({ cg_FieldHarfSize.x, 0.0f, 0.0f }, { 0.1f, cg_FieldSize.y, cg_FieldSize.z }, { 0.0f, 0.0f, 0.0f });
 	CreateBox({ -cg_FieldHarfSize.x, 0.0f, 0.0f }, { 0.1f, cg_FieldSize.y, cg_FieldSize.z }, { 0.0f, 0.0f, 0.0f });
 #endif
-	m_pPlayer->Draw();
-	m_MessageWindow.Draw();
-	for (int i = 0; i < cg_MaxEnemy; i++)
-	{
-		if (m_pEnemy[i]->CheckActive())
-			m_pEnemy[i]->Draw();
-	}
-	Effect::GetInstance()->Draw();
-
-	RenderTarget* pRTV = GetDefaultRTV();
-	DepthStencil* pDSV = GetDefaultDSV();
-
-	//==== ミッションの描画 ====
-	SetRenderTargets(1, &pRTV, nullptr);
-	Mission::MissionMenuDraw();
-	for (int i = 0; i < Mission::Type::eTypeMax; ++i)
-		m_pMission[i]->Draw();
-	Mission::CountRisset();
-	SetRenderTargets(1, &pRTV, pDSV);
 	
 	switch (m_phase)
 	{
 	case SceneGame::Phase::eGame:
+		GameDraw();
 		SetRenderTargets(1, &pRTV, nullptr);
 		m_GameUI.Draw();
 		SetRenderTargets(1, &pRTV, pDSV);
 		break;
 
 	case SceneGame::Phase::eGameOver:
+		GameDraw();
 		m_GameOver.Draw();
 		break;
 
 	case SceneGame::Phase::eDelay:
+		GameDraw();
 		SetRenderTargets(1, &pRTV, nullptr);
 		m_GameUI.Draw();
 		SetRenderTargets(1, &pRTV, pDSV);
 		break;
 
 	case SceneGame::eClear:
+		GameDraw();
 		SetRenderTargets(1, &pRTV, nullptr);
 		m_Clear.Draw();
+		SetRenderTargets(1, &pRTV, pDSV);
+		break;
+
+	case SceneGame::eCutIn:
+		m_CutIn.Draw();
+		SetRenderTargets(1, &pRTV, nullptr);
+		m_MessageWindow.Draw();
+		SetRenderTargets(1, &pRTV, pDSV);
+		break;
+
+	case SceneGame::eCutIn2:
+		m_CutIn.Draw();
+		SetRenderTargets(1, &pRTV, nullptr);
+		m_MessageWindow.Draw();
 		SetRenderTargets(1, &pRTV, pDSV);
 		break;
 	}
@@ -502,4 +516,118 @@ void SceneGame::EnemyMissionCount(int i)
 		if (m_pMission[Mission::eMain]->CheckActive())
 			m_pMission[Mission::eMain]->CountPlus();
 	}
+}
+
+void SceneGame::TextureMessage()
+{
+	switch (m_Step)
+	{
+	case eStep1:
+		if (m_nGameCount == 0)
+			m_MessageWindow.Start(MessageWindow::eMission1);
+		else if (m_nGameCount == 200)
+		{
+			m_GameUI.PlayMissionEffect(MissionEffect::eAnimeStart);
+			m_pMission[Mission::eTurret]->MissionStart();
+			TurretEnemy::SetMissionFlag(true);
+			m_nGameCount = 0;
+			m_Step = eStep2;
+		}
+		m_nGameCount++;
+		break;
+
+	case eStep2:
+		//ミッションをクリアしているか確認
+		if (m_pMission[Mission::eTurret]->CheckClear()) {
+			m_nGameCount++;
+			if (m_nGameCount > 180)
+			{
+				m_nGameCount = 0;
+				m_phase = eCutIn;	//カットインが入る
+				m_MessageWindow.Start(MessageWindow::eCutin1);
+			}
+		}
+		break;
+
+	case eStep3:
+		if (m_nGameCount == 10)
+			m_MessageWindow.Start(MessageWindow::eMission3);
+		else if (m_nGameCount == 210)
+		{
+			m_GameUI.PlayMissionEffect(MissionEffect::eAnimeStart);
+			m_pMission[Mission::eNormal]->MissionStart();
+			m_pMission[Mission::eCreate]->MissionStart();
+			m_pMission[Mission::eSuper ]->MissionStart();
+			NormalEnemy::SetMissionFlag(true);
+			CreateEnemy::SetMissionFlag(true);
+			SuperEnemy::SetMissionFlag(true);
+		}
+		else if (m_nGameCount == 410)
+			m_MessageWindow.Start(MessageWindow::eMission2);
+		else if (m_nGameCount == 700)
+		{
+			m_MessageWindow.Start(MessageWindow::eSuper);
+			m_nGameCount = 0;
+			m_Step = eStep4;
+		}
+		m_nGameCount++;
+		break;
+
+	case eStep4:
+		//クリアしているか条件を調べる
+		if (m_pMission[Mission::eNormal]->CheckClear() &&
+			m_pMission[Mission::eCreate]->CheckClear() &&
+			m_pMission[Mission::eSuper]->CheckClear())
+		{
+			m_nGameCount++;
+			if (m_nGameCount > 180)
+			{
+				m_nGameCount = 0;
+				m_phase = eCutIn2;
+				m_MessageWindow.Start(MessageWindow::eMission4);
+			}
+		}
+		break;
+
+	case eStep5:
+		if (m_pMission[Mission::eMain]->CheckClear())
+		{
+			m_nGameCount++;
+			if (m_nGameCount > 180)
+			{
+				m_phase = eClear;
+			}
+		}
+	}
+}
+
+void SceneGame::ResetPlayer()
+{
+	m_pPlayer->SetPos({ 0.0f, 0.0f, 0.0f });	//プレイヤーの位置を初期位置に戻す
+	m_pCamera->SetLook({ 0.0f, 0.0f, 5.65f });
+	m_pCamera->SetPos({ 0, -2.5, -5.65 });
+	//プレイヤーの移動量・モードもリセット
+}
+
+void SceneGame::GameDraw()
+{
+	RenderTarget* pRTV = GetDefaultRTV();
+	DepthStencil* pDSV = GetDefaultDSV();
+
+	m_pPlayer->Draw();
+	for (int i = 0; i < cg_MaxEnemy; i++)
+	{
+		if (m_pEnemy[i]->CheckActive())
+			m_pEnemy[i]->Draw();
+	}
+	Effect::GetInstance()->Draw();
+
+	//==== ミッションの描画 ====
+	SetRenderTargets(1, &pRTV, nullptr);
+	m_MessageWindow.Draw();
+	Mission::MissionMenuDraw();
+	for (int i = 0; i < Mission::Type::eTypeMax; ++i)
+		m_pMission[i]->Draw();
+	Mission::CountRisset();
+	SetRenderTargets(1, &pRTV, pDSV);
 }

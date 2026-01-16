@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CameraCutIn.cpp" />
     <ClCompile Include="CameraDebug.cpp" />
     <ClCompile Include="CameraGame.cpp" />
     <ClCompile Include="CameraTitle.cpp" />
@@ -202,6 +203,7 @@
   <ItemGroup>
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CameraCutIn.h" />
     <ClInclude Include="CameraDebug.h" />
     <ClInclude Include="CameraGame.h" />
     <ClInclude Include="CameraTitle.h" />

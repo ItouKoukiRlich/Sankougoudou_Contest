@@ -79,6 +79,12 @@
     <Filter Include="ヘッダー ファイル\SceneGame\Enemy\STATUS_UI">
       <UniqueIdentifier>{bede46bb-9443-463b-8824-01b427609af3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\SceneGame\CatIn">
+      <UniqueIdentifier>{73ae704c-c820-4fa2-8088-5bcfff273f52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\SceneGame\CutIn">
+      <UniqueIdentifier>{5d50520e-a0ca-462f-8fab-afe2204808e8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sprite.cpp">
@@ -244,7 +250,10 @@
       <Filter>ソース ファイル\SceneGame\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="CutIn.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\SceneGame\CatIn</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraCutIn.cpp">
+      <Filter>ソース ファイル\SceneGame\CatIn</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -417,7 +426,10 @@
       <Filter>ヘッダー ファイル\SceneGame\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="CutIn.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\SceneGame\CutIn</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraCutIn.h">
+      <Filter>ヘッダー ファイル\SceneGame\CutIn</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

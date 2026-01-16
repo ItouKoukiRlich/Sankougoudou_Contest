@@ -28,6 +28,8 @@ public:
 	/// <param name="flag">：ミッション対象ならtrue</param>
 	static void SetMissionFlag(bool flag);
 
+	static void staticDraw(Camera* pCamera, DXf3 pos);
+
 private:
 	/// <summary>
 	/// 移動処理

@@ -30,9 +30,9 @@ MessageWindow::MessageWindow()
 	,m_bFlag(false)
 {
 	//テクスチャの読み込み
+	m_ui.SetUI("Assets/Texture/Message/MessageWindow.png", Base, BasePos, 0.5f);
 	m_ui.SetUI("Assets/Texture/Message/Wave.png", Wave, WavePos, 0.1f);
 	m_ui.SetUI("Assets/Texture/Message/Font.png", Message, MessagePos);
-	m_ui.SetUI("Assets/Texture/Message/MessageWindow.png", Base, BasePos, 0.5f);
 
 	//UIのステータス調整
 	m_ui.ChangeScale(Base,		BaseScale.x, InitScale);
